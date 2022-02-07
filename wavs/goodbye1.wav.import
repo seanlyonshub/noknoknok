@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/goodbye1.wav-8e7a2450da382c958d38a8bb38b73070.sample"
+
+[deps]
+
+source_file="res://wavs/goodbye1.wav"
+dest_files=[ "res://.import/goodbye1.wav-8e7a2450da382c958d38a8bb38b73070.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=true
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop=false
+compress/mode=0
