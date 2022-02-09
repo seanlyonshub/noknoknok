@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/hey2.wav-c2402d3960b019c6e1c2e54f5dc248a1.sample"
+
+[deps]
+
+source_file="res://wavs/hey2.wav"
+dest_files=[ "res://.import/hey2.wav-c2402d3960b019c6e1c2e54f5dc248a1.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=true
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop=false
+compress/mode=0

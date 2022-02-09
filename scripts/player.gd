@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
 export (int) var speed
+export (int) var dash_duration
 export (int) var acceleration
 export (NodePath) var audio_player_path
 
@@ -30,7 +31,7 @@ func _physics_process(delta: float) -> void:
 			timer += 1
 			acceleration = init_acceleration * 2
 			speed = init_speed * 8
-			if timer % 15 == 0:
+			if timer % dash_duration == 0:
 				can_timer = false
 		else:
 			acceleration = init_acceleration
@@ -39,12 +40,15 @@ func _physics_process(delta: float) -> void:
 	velocity.x += (input_x * speed - velocity.x) / acceleration
 	velocity.y += (input_y * speed - velocity.y) / acceleration
 
-	for collision in get_slide_count():
-		if get_slide_collision(collision).collider != null:
-			if get_slide_collision(collision).collider.name.begins_with("door"):
-				if get_slide_collision(collision).normal == -velocity.normalized().round():
+	if get_collider() != null:
+		match get_collider().name.rstrip("0123456789"):
+			"door":
+				if get_collision_normal() == -velocity.normalized().round():
 					if speed > init_speed:
-						get_slide_collision(collision).collider.knock()
+						get_collider().knock()
+			"fire":
+				kill()
+				get_collider().kill()
 
 	velocity = move_and_slide(velocity)
 
@@ -58,3 +62,17 @@ func kill() -> void:
 
 func has_killed() -> void:
 	get_tree().reload_current_scene()
+
+func get_collider():
+	for collision_index in get_slide_count():
+		var collision = get_slide_collision(collision_index)
+		if is_instance_valid(collision.collider):
+			return collision.collider
+	return null
+
+func get_collision_normal():
+	for collision_index in get_slide_count():
+		var collision = get_slide_collision(collision_index)
+		if collision != null:
+			return collision.normal
+	return null

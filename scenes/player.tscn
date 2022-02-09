@@ -74,6 +74,7 @@ tracks/2/keys = {
 [node name="player" type="KinematicBody2D"]
 script = ExtResource( 1 )
 speed = 16
+dash_duration = 15
 acceleration = 4
 
 [node name="collision" type="CollisionPolygon2D" parent="."]

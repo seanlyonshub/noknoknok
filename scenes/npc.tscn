@@ -66,6 +66,10 @@ __meta__ = {
 }
 speed = 8
 
+[node name="ray" type="RayCast2D" parent="."]
+enabled = true
+cast_to = Vector2( 0, 0 )
+
 [node name="animations" type="AnimationPlayer" parent="."]
 anims/RESET = SubResource( 2 )
 anims/kill = SubResource( 3 )

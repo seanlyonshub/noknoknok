@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/fuckoff2.wav-7182c04bce1aa3db2b8e2d0635d48a89.sample"
+
+[deps]
+
+source_file="res://wavs/fuckoff2.wav"
+dest_files=[ "res://.import/fuckoff2.wav-7182c04bce1aa3db2b8e2d0635d48a89.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=true
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop=false
+compress/mode=0
