@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://scenes/door.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/player.tscn" type="PackedScene" id=2]
@@ -25,1078 +25,1625 @@
 [ext_resource path="res://wavs/churchbell1.wav" type="AudioStream" id=23]
 [ext_resource path="res://wavs/oi1.wav" type="AudioStream" id=24]
 [ext_resource path="res://scenes/fire.tscn" type="PackedScene" id=25]
+[ext_resource path="res://scripts/root.gd" type="Script" id=26]
+[ext_resource path="res://wavs/gunshot1.wav" type="AudioStream" id=27]
+[ext_resource path="res://wavs/gunshot2.wav" type="AudioStream" id=28]
+[ext_resource path="res://wavs/aintfrommyhood1.wav" type="AudioStream" id=29]
+[ext_resource path="res://scenes/gun.tscn" type="PackedScene" id=30]
+[ext_resource path="res://wavs/notcoolbro1.wav" type="AudioStream" id=31]
+[ext_resource path="res://wavs/comehere1.wav" type="AudioStream" id=32]
+[ext_resource path="res://wavs/ghost1.wav" type="AudioStream" id=33]
+[ext_resource path="res://wavs/upgrade1.wav" type="AudioStream" id=34]
+[ext_resource path="res://wavs/upgrade2.wav" type="AudioStream" id=35]
+[ext_resource path="res://scripts/upgrades.gd" type="Script" id=36]
+[ext_resource path="res://scenes/upgrade.tscn" type="PackedScene" id=37]
+
+[sub_resource type="Animation" id=1]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("camera:zoom")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "shake"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -9.0, 3.0, 0.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("camera:zoom")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 1.1, 1.1 ), Vector2( 1, 1 ) ]
+}
 
 [node name="root" type="Node2D"]
-modulate = Color( 0.262745, 0.321569, 0.239216, 1 )
-__meta__ = {
-"_edit_horizontal_guides_": [  ]
-}
+script = ExtResource( 26 )
+
+[node name="animations" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 1 )
+anims/shake = SubResource( 2 )
 
 [node name="audio" type="AudioStreamPlayer" parent="."]
 script = ExtResource( 3 )
-dialogue = [ ExtResource( 15 ), ExtResource( 13 ), ExtResource( 12 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 19 ), ExtResource( 18 ), ExtResource( 21 ), ExtResource( 20 ), ExtResource( 22 ), ExtResource( 23 ), ExtResource( 24 ) ]
+upgrades = [ ExtResource( 34 ), ExtResource( 35 ) ]
+dialogue = [ ExtResource( 15 ), ExtResource( 13 ), ExtResource( 12 ), ExtResource( 16 ), ExtResource( 17 ), ExtResource( 19 ), ExtResource( 18 ), ExtResource( 21 ), ExtResource( 20 ), ExtResource( 22 ), ExtResource( 23 ), ExtResource( 24 ), ExtResource( 29 ), ExtResource( 31 ), ExtResource( 32 ), ExtResource( 33 ) ]
 door_unlocks = [ ExtResource( 10 ), ExtResource( 11 ) ]
 door_knocks = [ ExtResource( 6 ), ExtResource( 9 ) ]
+gunshots = [ ExtResource( 27 ), ExtResource( 28 ) ]
 footsteps = [ ExtResource( 7 ), ExtResource( 8 ) ]
 
 [node name="camera" type="Camera2D" parent="."]
-visible = false
+modulate = Color( 0.780392, 0.941176, 0.847059, 1 )
 rotation = -1.74846e-07
+scale = Vector2( 8, 8 )
 current = true
 script = ExtResource( 5 )
-player_path = NodePath("../npcs/player")
+player_path = NodePath("../foreground/npcs/player")
 
-[node name="walls" type="Node2D" parent="."]
+[node name="background" type="ColorRect" parent="camera"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -41.0
+margin_top = -24.375
+margin_right = 43.0
+margin_bottom = 23.625
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="wall" type="StaticBody2D" parent="walls"]
+[node name="foreground" type="Node2D" parent="."]
+modulate = Color( 0.262745, 0.321569, 0.239216, 1 )
+
+[node name="upgrades" type="Node2D" parent="foreground"]
+script = ExtResource( 36 )
+upgrade = ExtResource( 37 )
+
+[node name="walls" type="Node2D" parent="foreground"]
+
+[node name="wall" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 0, -4 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall"]
 polygon = PoolVector2Array( -8, -12, 8, -12, 8, 0, 4, 0, 4, -6, -4, -6, -4, 0, -8, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall"]
 polygon = PoolVector2Array( -8, -12, 0, -16, 8, -12, 4, -12, 4, -3, -4, -3, -4, -12 )
 
-[node name="door" parent="walls/wall" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall" instance=ExtResource( 1 )]
 position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
 linked_npcs = [ NodePath("../../../npcs/npc") ]
 
-[node name="wall2" type="StaticBody2D" parent="walls"]
+[node name="wall2" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 0, -7 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall2"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall2"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall2"]
-polygon = PoolVector2Array( -10, 21, -13, 21.114, -13, -26.1412, -14, -27.1466, -12, -29.1575, -11, -28.1521, 24, -28.1521, 24, -27.1466, -10, -27.1466, -8, -25.1358, -10, -23.1249, -12, -25.1358, -12, -4.02172, -5, -4, -5, -6, 5, -6, 5, -4, 53, -4.02172, 53, 25, 55, 25, 55, 28, 53, 28, 53, 31, 52, 31, 52, 21.114, 32, 21.114, 32, 19.1032, 52, 19.1032, 52, -3.01629, 13, -3, 13, 2.01086, 17, 2.01086, 17, 6.03258, 13, 6.03258, 13, 19.1032, 24, 19.1032, 24, 21.114, -2, 21, -2, 19.1032, 12, 19.1032, 12, 6.03258, 10, 6.03258, 10, 2.01086, 12, 2.01086, 12, -3, 4, -3, 4, -5, -4, -5, -4, -3, -12, -3, -12, 19.1032, -10, 19.1032 )
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall2"]
+polygon = PoolVector2Array( -10, 21, -13, 21.114, -13, -26.1412, -14, -27.1466, -12, -29.1575, -11, -28.1521, 24, -28.1521, 24, -27.1466, -10, -27.1466, -8, -25.1358, -10, -23.1249, -12, -25.1358, -12, -4.02172, -5, -4, -5, -6, 5, -6, 5, -4, 53, -4.02172, 53, 25, 55, 25, 55, 28, 53, 28, 53, 31, 52, 31, 52, 21.114, 32, 21.114, 34, 19, 52, 19.1032, 52, -3.01629, 13, -3, 13, 2.01086, 16, 2, 17, 3, 17, 5, 16, 6, 13, 6.03258, 13, 19.1032, 22, 19, 24, 21.114, -2, 21, -2, 19.1032, 12, 19.1032, 12, 6.03258, 10, 6.03258, 10, 2.01086, 12, 2.01086, 12, -3, 4, -3, 4, -5, -4, -5, -4, -3, -12, -3, -12, 19.1032, -10, 19.1032 )
 
-[node name="door" parent="walls/wall2" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall2" instance=ExtResource( 1 )]
 position = Vector2( -6, 19 )
+audio_player_path = NodePath("../../../../audio")
 
-[node name="wall3" type="StaticBody2D" parent="walls"]
+[node name="wall3" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 28, -4 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall3"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall3"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall3"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall3"]
 polygon = PoolVector2Array( -8, -8, 8, -8, 8, -6, 16, -6, 16, 0, 4, 0, 4, -6, -4, -6, -4, 0, -8, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall3"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall3"]
 polygon = PoolVector2Array( -8, -8, 0, -10, 8, -8, 16, -6, 8, -6, 8, -8, 4, -8, 4, -3, -4, -3, -4, -8 )
 
-[node name="door" parent="walls/wall3" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall3" instance=ExtResource( 1 )]
 position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
 linked_npcs = [ NodePath("../../../npcs/npc2") ]
 
-[node name="wall4" type="StaticBody2D" parent="walls"]
-position = Vector2( 50, 10 )
+[node name="wall56" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 88, 32 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall4"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall56"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall4"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall56"]
+polygon = PoolVector2Array( -8, -20, 8, -20, 8, -14, 32, -14, 32, -8, 45, -8, 45, -22, 46, -22, 46, -16, 49, -16, 49, -18, 52, -18, 52, -16, 60, -16, 60, -15, 46, -15, 46, -8, 48, -8, 48, -7, 47, -7, 47, -5, 48, -5, 48, 0, 44, 0, 44, -6, 36, -6, 36, 0, 28, 0, 28, -6, 20, -6, 20, 2, 17, 2, 17, 0, 8, 0, 4, 0, 4, -6, -4, -6, -4, 0, -11, 0, -11, 8, -10, 8, -10, 11, -13, 11, -13, 8, -12, 8, -12, 0, -15, 0, -15, -6, -8, -6 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall56"]
+polygon = PoolVector2Array( -8, -24, -3, -23, -3, -24, -2, -24, -2, -25, -1, -27, -1, -31, -2, -31, -2, -33, 3, -33, 3, -31, 2, -31, 2, -27, 3, -25, 3, -23, 4, -23, 4, -21, 8, -20, 8, -18, 20, -16, 21, -20, 21, -24, 20, -24, 20, -25, 23, -25, 23, -24, 22, -24, 22, -22, 23, -16, 24, -16, 24, -15, 32, -14, 32, -12, 38, -10, 39, -10, 40, -11, 40, -13, 41, -13, 41, -10, 42, -10, 42, -9, 48, -8, 28, -8, 28, -3, 20, -3, 20, -8, -8, -8, -8, -20, -7, -20, -7, -22, -8, -22 )
+
+[node name="door" parent="foreground/walls/wall56" instance=ExtResource( 1 )]
+position = Vector2( 24, -2 )
+audio_player_path = NodePath("../../../../audio")
+
+[node name="wall4" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 49, 9 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall4"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall4"]
 polygon = PoolVector2Array( -8, -6, 0, -6, 0, 0, -2, 0, -2, -5, -6, -5, -6, 0, -8, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall4"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall4"]
 polygon = PoolVector2Array( -8, -6, -4, -10, 0, -6, -2, -6, -2, -2, -6, -2, -6, -6 )
 
-[node name="wall5" type="StaticBody2D" parent="walls"]
+[node name="wall5" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -12, -44 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall5"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall5"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall5"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall5"]
 polygon = PoolVector2Array( -8, -14, 8, -14, 8, 0, 4, 0, 4, -6, -4, -6, -4, 0, -8, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall5"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall5"]
 polygon = PoolVector2Array( -8, -14, -6, -15, -6, -16, -5, -16, -5, -19, -4, -19, -4, -16, -3, -16, 0, -17, 8, -14, 4, -14, 4, -3, -4, -3, -4, -14 )
 
-[node name="door" parent="walls/wall5" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall5" instance=ExtResource( 1 )]
 position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
 
-[node name="wall6" type="StaticBody2D" parent="walls"]
+[node name="wall6" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 4, -44 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall6"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall6"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall6"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall6"]
 polygon = PoolVector2Array( -8, -10, 8, -10, 8, -2, 9, -2, 9, -1, 10, -1, 10, 0, 4, 0, 4, -6, -4, -6, -4, 0, -8, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall6"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall6"]
 polygon = PoolVector2Array( -8, -10, 0, -12, 8, -10, 4, -10, 4, -3, -4, -3, -4, -10 )
 
-[node name="door" parent="walls/wall6" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall6" instance=ExtResource( 1 )]
 position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
 
-[node name="wall7" type="StaticBody2D" parent="walls"]
+[node name="wall7" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -40, -27 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall7"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall7"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall7"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall7"]
 polygon = PoolVector2Array( -24, -12, 8, -12, 8, -7, 2, -7, 2, 1, 8, 1, 10, 3, -14, 3, -14, 1, -22, 1, -22, 3, -32, 3, -34, 1, -32, 1, -32, -1, -30, -1, -30, 1, -24, 1 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall7"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall7"]
 position = Vector2( 0, -2 )
 polygon = PoolVector2Array( -24, -10, -8, -18, 8, -10, 5, -10, 5, 3, 2, 3, 2, -10, -20, -10, -20, -6, -25, -6, -24, -5, -24, -4, -26, -6, -31, -6, -29, -8, -22, -8, -22, -10 )
 
-[node name="door" parent="walls/wall7" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall7" instance=ExtResource( 1 )]
 position = Vector2( 6, -3 )
 rotation = -1.5708
+audio_player_path = NodePath("../../../../audio")
 
-[node name="wall8" type="StaticBody2D" parent="walls"]
+[node name="wall8" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -58, -18 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall8"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall8"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall8"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall8"]
 polygon = PoolVector2Array( -8, -10, 8, -10, 8, -2, 10, 0, 8, 2, 6, 0, 4, 0, 4, -6, -4, -6, -4, 0, -8, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall8"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall8"]
 polygon = PoolVector2Array( -8, -10, -4, -10, -4, -3, 4, -3, 4, -10, 8, -10, 0, -13 )
 
-[node name="door" parent="walls/wall8" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall8" instance=ExtResource( 1 )]
 position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
 linked_npcs = [ NodePath("../../../npcs/npc3"), NodePath("../../../npcs/npc4") ]
 
-[node name="wall9" type="StaticBody2D" parent="walls"]
+[node name="wall9" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -64, -18 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall9"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall9"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall9"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall9"]
 polygon = PoolVector2Array( -1, 0, -1, 8, -22, 8, -23, 7, -23, -2, -21, -2, -21, -3, -22, -3, -22, -4, -23, -4, -23, -6, -24, -6, -24, 8, -32, 8, -32, 10, -26, 10, -24, 12, -22, 10, -1, 10, -1, 18, 0, 18, 0, 10, 3, 10, 3, 11, 6, 11, 6, 10, 8, 10, 8, 8, 6, 8, 6, 7, 3, 7, 3, 8, 0, 8, 0, 0 )
 
-[node name="wall10" type="StaticBody2D" parent="walls"]
+[node name="wall10" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -48, 38 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall10"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall10"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall10"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall10"]
 polygon = PoolVector2Array( -8, -14, 8, -14, 8, -4, 24, -4, 24, -3, 8, -3, 8, 0, 4, 0, 4, -6, -4, -6, -4, 0, -8, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall10"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall10"]
 polygon = PoolVector2Array( 0, -17, 3, -16, 4, -16, 4, -19, 5, -19, 5, -16, 6, -16, 6, -15, 8, -14, 4, -14, 4, -3, -4, -3, -6, -4, -8, -4, -9, -5, -10, -4, -10, 0, -11, 0, -11, -6, -12, -6, -12, -8, -8, -8, -8, -11, -9, -12, -10, -12, -10, -8, -11, -8, -11, -11, -12, -12, -10, -14, -8, -14 )
 
-[node name="door" parent="walls/wall10" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall10" instance=ExtResource( 1 )]
 position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
 
-[node name="wall11" type="StaticBody2D" parent="walls"]
+[node name="wall11" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -76, 32 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall11"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall11"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall11"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall11"]
 polygon = PoolVector2Array( -8, -10, 8, -10, 8, 0, 4, 0, 4, -6, -4, -6, -4, 0, -8, 4, -13, -1, -8, -6 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall11"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall11"]
 polygon = PoolVector2Array( -10, -10, -8, -8, -6, -10, -4, -8, -4, -3, 4, -3, 4, -8, 6, -10, 8, -8, 10, -10, 6, -14, -6, -14 )
 
-[node name="door" parent="walls/wall11" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall11" instance=ExtResource( 1 )]
 position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
 
-[node name="wall58" type="StaticBody2D" parent="walls"]
+[node name="wall58" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -116, 144 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall58"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall58"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall58"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall58"]
 polygon = PoolVector2Array( -8, -10, 8, -10, 8, -7, 7, -7, 7, -5, 8, -5, 8, 0, 4, 0, 4, -6, -4, -6, -4, 0, -8, 0, -8, -3, -18, -3, -19, -2, -19, 15, -4, 15, -4, 16, -19, 16, -19, 24, -20, 24, -20, -3, -21, -4, -20, -5, -19, -4, -8, -4 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall58"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall58"]
 polygon = PoolVector2Array( -10, -10, -8, -8, -6, -10, -4, -8, -4, -3, 4, -3, 4, -8, 6, -10, 8, -8, 10, -10, 6, -14, -6, -14 )
 
-[node name="door" parent="walls/wall58" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall58" instance=ExtResource( 1 )]
 position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
+linked_npcs = [ NodePath("../../../npcs/npc19") ]
 
-[node name="wall12" type="StaticBody2D" parent="walls"]
+[node name="wall12" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -92, 43 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall12"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall12"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall12"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall12"]
 polygon = PoolVector2Array( -18, -19, -8, -19, -8, -14, 8, -14, 8, 0, 0, 0, 0, -6, -8, -6, -8, 0, -18, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall12"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall12"]
 polygon = PoolVector2Array( 8, -14, -8, -19, -13, -21, -18, -19, -18, -14, -8, -14, -8, -3, 0, -3, 0, -14 )
 
-[node name="door" parent="walls/wall12" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall12" instance=ExtResource( 1 )]
 position = Vector2( -4, -2 )
+audio_player_path = NodePath("../../../../audio")
 
-[node name="wall13" type="StaticBody2D" parent="walls"]
+[node name="wall13" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -62, 72 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall13"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall13"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall13"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall13"]
 polygon = PoolVector2Array( 3, -8, 0, -8, 0, -2, -8, -2, -8, -8, -11, -8, -11, 24, 3, 24 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall13"]
-polygon = PoolVector2Array( -8, 0, -8, -5, 0, -5, 0, 0 )
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall13"]
+polygon = PoolVector2Array( -8, -2, -8, -5, 0, -5, 0, -2 )
 
-[node name="door" parent="walls/wall13" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall13" instance=ExtResource( 1 )]
 position = Vector2( -4.00002, -6 )
 rotation = 3.14159
+audio_player_path = NodePath("../../../../audio")
 
-[node name="wall14" type="StaticBody2D" parent="walls"]
+[node name="wall94" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -187, 8 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall94"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall94"]
+polygon = PoolVector2Array( 3, -8, 0, -8, 0, -2, -8, -2, -8, -9, -11, -9, -11, 5, -13, 5, -13, 10, -27, 10, -27, 16, -30, 16, -30, 14, -33, 14, -33, 16, -40, 16, -40, 17, -37, 17, -37, 32, -28.8859, 32, -13, 32, -13, 31, -36, 31, -36, 17, -27, 17, -27, 24, -2, 24, -2, 29, -2, 31, -5, 31, -5, 32, -2, 32, -1, 33, 0, 32, -1, 31, -1, 24, 3, 24, 3, 17, 11, 17, 11, 16, 3, 16 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall94"]
+polygon = PoolVector2Array( -8, -1, -8, -5, 0, -5, 0, -1 )
+
+[node name="door" parent="foreground/walls/wall94" instance=ExtResource( 1 )]
+position = Vector2( -4.00002, -6 )
+rotation = 3.14159
+audio_player_path = NodePath("../../../../audio")
+
+[node name="wall95" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -204, 19 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall95"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall95"]
+polygon = PoolVector2Array( -8, -8, -8, -1, 0, -1, 0, -10, 2, -10, 2, 1, -10, 1, -10, -8 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall95"]
+polygon = PoolVector2Array( -8, -1, -8, -5, 0, -5, 0, -1 )
+
+[node name="door" parent="foreground/walls/wall95" instance=ExtResource( 1 )]
+position = Vector2( -4.00002, -6 )
+rotation = 3.14159
+audio_player_path = NodePath("../../../../audio")
+
+[node name="wall14" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -69, 80 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall14"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall14"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall14"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall14"]
 polygon = PoolVector2Array( -3, 16, -3, 4, -19, 4, -19, 6, -13, 6, -13, 14, -19, 14, -21, 16 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall14"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall14"]
 polygon = PoolVector2Array( -19, 4, -16, 4, -16, 14, -13, 14, -13, 4, -3, 4, -11, 0 )
 
-[node name="door" parent="walls/wall14" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall14" instance=ExtResource( 1 )]
 position = Vector2( -17, 10 )
 rotation = 1.5708
+audio_player_path = NodePath("../../../../audio")
 linked_npcs = [ NodePath("../../../npcs/npc5"), NodePath("../../../npcs/npc6") ]
 
-[node name="wall15" type="StaticBody2D" parent="walls"]
+[node name="wall15" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -75, -56 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall15"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall15"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall15"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall15"]
 polygon = PoolVector2Array( -8, -12, 12, -12, 12, 0, 4, 0, 4, -6, -4, -6, -4, 0, -8, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall15"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall15"]
 polygon = PoolVector2Array( -8, -12, 0, -15, 8, -12, 4, -12, 4, -3, -4, -3, -4, -12 )
 
-[node name="door" parent="walls/wall15" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall15" instance=ExtResource( 1 )]
 position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
 
-[node name="wall16" type="StaticBody2D" parent="walls"]
+[node name="wall70" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -168, -60 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall70"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall70"]
+polygon = PoolVector2Array( -24, -20, -8, -20, -8, -12, 8, -12, 8, -9, 17, -9, 17, -10, 20, -10, 20, 33, 19, 33, 19, 28, 6, 28, 5, 29, 4, 29, 4, 26, 5, 26, 6, 27, 19, 27, 19, -7, 17, -7, 17, -8, 8, -8, 8, -7, 7, -7, 7, -4, 8, -4, 8, -5, 9, -5, 9, -3, 8, -3, 8, 0, 7, 0, 7, 1, 4, 1, 4, -6, -4, -6, -4, 1, -7, 1, -7, 0, -27, 0, -27, -5, -35, -5, -35, 19, -33, 19, -33, 22, -35, 22, -35, 27, -6, 27, -5, 26, -4, 26, -4, 29, -5, 29, -6, 28, -36, 28, -36, -5, -40, -5, -40, -6, -27, -6, -27, -8, -24, -8, -24, -11, -25, -11, -25, -13, -24, -13, -24, -12, -23, -12, -23, -16, -24, -16 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall70"]
+polygon = PoolVector2Array( -4, -17, 0, -15, 8, -12, 9, -11, 8, -10, 4, -12, 4, -3, -4, -3, -4, -12, -16, -12, -16, -20, -24, -18, -25, -19, -24, -20, -18, -23, -16, -26, -14, -23, -8, -20, -7, -19, -8, -18, -8, -15 )
+
+[node name="door" parent="foreground/walls/wall70" instance=ExtResource( 1 )]
+position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
+linked_npcs = [ NodePath("../../../npcs/npc15") ]
+
+[node name="wall16" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -59, -56 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall16"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall16"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall16"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall16"]
 polygon = PoolVector2Array( -8, -16, 8, -16, 8, -12, 5, -12, 5, -10, 8, -10, 8, 0, 4, 0, 4, -6, -4, -6, -4, 0, -8, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall16"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall16"]
 polygon = PoolVector2Array( -8, -16, 0, -18, 8, -16, 4, -16, 4, -3, -4, -3, -4, -16 )
 
-[node name="door" parent="walls/wall16" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall16" instance=ExtResource( 1 )]
 position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
 
-[node name="wall17" type="StaticBody2D" parent="walls"]
+[node name="wall17" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -91, -54 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall17"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall17"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall17"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall17"]
 polygon = PoolVector2Array( -12, -16, 8, -16, 8, 0, 6, 0, 6, 4, 5, 4, 5, 0, 3, 0, 3, -6, -5, -6, -5, 0, -8, 0, -9, 0, -9, 5, -2, 5, -2, 6, -10, 6, -10, 0, -12, 0, -12, -5, -10, -5, -10, -9, -12, -9 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall17"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall17"]
 polygon = PoolVector2Array( -8, -20, 4, -20, 10, -14, 8, -12, 3, -12, 3, -3, -5, -3, -5, -12, -12, -12, -14, -14 )
 
-[node name="door" parent="walls/wall17" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall17" instance=ExtResource( 1 )]
 position = Vector2( -1, -2 )
+audio_player_path = NodePath("../../../../audio")
 linked_npcs = [ NodePath("../../../npcs/npc8") ]
 
-[node name="wall18" type="StaticBody2D" parent="walls"]
+[node name="wall18" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -27, 75 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall18"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall18"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall18"]
-polygon = PoolVector2Array( -21, 8, -21, 7, -22, 7, -22, 6, -23, 6, -23, -2, -24, -2, -24, 8, -32, 8, -32, 10, -24, 10, -24, 18, -32, 18, -32, 19, -24, 19, -24, 29, -23, 29, -23, 10, 1, 10, 19, 28, 19, 32, 11, 40, 12, 41, 21, 32, 23, 32, 23, 28, 21, 28, 3, 10, 8, 10, 8, 8, 5, 8, 9, 4, 10, 5, 11, 4, 8, 1, 7, 2, 8, 3, 3, 8 )
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall18"]
+polygon = PoolVector2Array( -21, 8, -21, 7, -22, 7, -22, 6, -23, 6, -23, -2, -24, -2, -24, 8, -32, 8, -32, 10, -24, 10, -24, 18, -32, 18, -32, 19, -24, 19, -24, 29, -23, 29, -23, 10, 1, 10, 19, 28, 19, 32, 11, 40, 12, 41, 21, 32, 23, 32, 23, 28, 21, 28, 3, 10, 8, 10, 8, 8, 5, 8, 9, 4, 10, 5, 11, 4, 8, 1, 7, 2, 7, 4, 3, 8 )
 
-[node name="wall19" type="StaticBody2D" parent="walls"]
+[node name="wall19" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 26, 80 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall19"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall19"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall19"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall19"]
 polygon = PoolVector2Array( -8, -12, -5, -12, -5, -21, -2, -21, -2, -19, 1, -19, 2, -20, 3, -19, 7, -19, 8, -20, 9, -19, 12, -19, 12, -18, -4, -18, -4, -12, 8, -12, 8, -6, 14, -6, 14, -8, 18, -8, 18, -6, 24, -6, 24, 0, 4, 0, 4, -6, -4, -6, -4, 0, -8, 0, -8, -2, -10, -2, -10, -5, -8, -5 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall19"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall19"]
 polygon = PoolVector2Array( -8, -12, 0, -16, 8, -12, 4, -12, 4, -3, -4, -3, -4, -12 )
 
-[node name="door" parent="walls/wall19" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall19" instance=ExtResource( 1 )]
 position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
+linked_npcs = [ NodePath("../../../npcs/npc18") ]
 
-[node name="wall20" type="StaticBody2D" parent="walls"]
+[node name="wall20" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 62, 80 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall20"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall20"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall20"]
-polygon = PoolVector2Array( -12, -25, 8, -25, 8, -22, 6, -22, 6, -19, 18, -19, 19, -20, 20, -19, 26, -19, 26, -21, 29, -21, 29, -19, 30, -19, 30, -18, 23, -18, 23, 0, 22, 0, 22, -18, 8, -18, 8, 0, 3, 0, 3, -6, -5, -6, -5, 0, -12, 0, -12, -8, -10, -8, -10, -12, -12, -12, -12, -18, -18, -18, -18, -19, -12, -19 )
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall20"]
+polygon = PoolVector2Array( -12, -25, 8, -25, 8, -22, 6, -22, 6, -19, 18, -19, 19, -20, 20, -19, 26, -19, 26, -21, 27, -21, 27, -29, 25, -31, 18, -31, 18, -30, 17, -30, 17, -21, 16, -21, 16, -30, 15, -30, 15, -33, 18, -33, 18, -32, 26, -32, 28, -34, 30, -32, 28, -30, 28, -21, 29, -21, 29, -19, 30, -19, 30, -18, 23, -18, 23, 0, 22, 0, 22, -18, 8, -18, 8, 0, 3, 0, 3, -6, -5, -6, -5, 0, -12, 0, -12, -8, -10, -8, -10, -12, -12, -12, -12, -18, -18, -18, -18, -19, -12, -19 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall20"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall20"]
 polygon = PoolVector2Array( -10, -30, 5, -30, 10, -25, 8, -22, 3, -22, 3, -3, -5, -3, -5, -22, -12, -22, -14, -25 )
 
-[node name="door" parent="walls/wall20" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall20" instance=ExtResource( 1 )]
 position = Vector2( -1, -2 )
+audio_player_path = NodePath("../../../../audio")
 linked_npcs = [ NodePath("../../../npcs/npc9") ]
 
-[node name="wall23" type="StaticBody2D" parent="walls"]
+[node name="wall23" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 78, 80 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall23"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall23"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall23"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall23"]
 polygon = PoolVector2Array( -8, -14, 8, -14, 8, 0, 7, 0, 7, 9, -6, 9, -6, 7, 6, 7, 6, 0, 4, 0, 4, -6, -4, -6, -4, 0, -8, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall23"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall23"]
 polygon = PoolVector2Array( -8, -14, -6, -15, -6, -16, -5, -16, -5, -21, -4, -21, -4, -16, -3, -16, 0, -17, 8, -14, 4, -14, 4, -3, -4, -3, -4, -14 )
 
-[node name="door" parent="walls/wall23" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall23" instance=ExtResource( 1 )]
 position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
+linked_npcs = [ NodePath("../../../npcs/npc16") ]
 
-[node name="wall32" type="StaticBody2D" parent="walls"]
+[node name="wall32" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 94, 80 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall32"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall32"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall32"]
-polygon = PoolVector2Array( -8, -14, 8, -14, 8, -7, 12, -5, 12, 0, 8, 0, 4, 0, 4, -6, -4, -6, -4, 0, -8, 0 )
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall32"]
+polygon = PoolVector2Array( -8, -14, 8, -14, 8, -13, 10, -13, 10, -10, 8, -10, 8, -7, 12, -5, 12, -3, 18, -3, 18, -5, 19, -6, 20, -5, 20, -3, 23, -3, 23, -8, 31, -8, 31, -3, 34, -3, 34, -5, 35, -6, 36, -5, 36, -3, 50, -3, 50, -5, 51, -6, 52, -5, 52, -3, 56, -3, 56, -46, 55, -46, 55, -50, 42, -50, 42, -52, 58, -52, 58, -51, 60, -51, 60, -46, 58, -46, 58, -1, 52, -1, 52, 1, 50, 1, 50, -1, 36, -1, 36, 1, 34, 1, 34, -1, 20, -1, 20, 1, 18, 1, 18, -1, 12, -1, 12, 0, 8, 0, 4, 0, 4, -6, -4, -6, -4, 0, -8, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall32"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall32"]
 polygon = PoolVector2Array( -8, -14, -3, -16, 0, -17, 8, -14, 4, -14, 4, -3, -4, -3, -4, -14 )
 
-[node name="door" parent="walls/wall32" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall32" instance=ExtResource( 1 )]
 position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
 
-[node name="wall61" type="StaticBody2D" parent="walls"]
+[node name="wall61" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 88, 172 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall61"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall61"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall61"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall61"]
 polygon = PoolVector2Array( -8, -8, 12, -8, 16, -4, 16, -1, 15, 0, 12, 0, 11, 1, 10, 1, 9, 0, 7, 0, 7, -6, -1, -6, -1, 0, -3, 0, -4, 1, -5, 1, -6, 0, -8, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall61"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall61"]
 polygon = PoolVector2Array( 7, -8, 7, -3, -1, -3, -1, -8, -9, -8, -9, -9, 13, -9, 13, -8 )
 
-[node name="door" parent="walls/wall61" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall61" instance=ExtResource( 1 )]
 position = Vector2( 3, -2 )
+audio_player_path = NodePath("../../../../audio")
+linked_npcs = [ NodePath("../../../npcs/npc17") ]
 
-[node name="wall62" type="StaticBody2D" parent="walls"]
+[node name="wall71" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 143, 215 )
+scale = Vector2( -1, 1 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall71"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall71"]
+polygon = PoolVector2Array( 12, -8, 16, -4, 16, -1, 15, 0, 12, 0, 11, 1, 10, 1, 9, 0, 7, 0, 7, -6, -1, -6, -1, 0, -3, 0, -4, 1, -5, 1, -6, 0, -8, 0, -8, -1, -9, -1, -9, -3, -8, -3, -8, -4, -7, -4, -7, -6, -8, -6, -8, -8 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall71"]
+polygon = PoolVector2Array( 7, -8, 7, -4, 15, -4, 15, -2, 24, -2, 24, -1, 14, -1, 14, -3, 7, -3, -1, -3, -1, -8 )
+
+[node name="door" parent="foreground/walls/wall71" instance=ExtResource( 1 )]
+position = Vector2( 3, -2 )
+audio_player_path = NodePath("../../../../audio")
+
+[node name="wall62" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 112, 184 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall62"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall62"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall62"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall62"]
 polygon = PoolVector2Array( 12, 0, 7, 0, 7, -6, -1, -6, -1, 0, -6, 0, 3, -11 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall62"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall62"]
 polygon = PoolVector2Array( 7, -3, 7, -6, -1, -6, -1, -3 )
 
-[node name="door" parent="walls/wall62" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall62" instance=ExtResource( 1 )]
 position = Vector2( 3, -2 )
+audio_player_path = NodePath("../../../../audio")
 
-[node name="wall67" type="StaticBody2D" parent="walls"]
+[node name="wall82" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -192, -44 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall82"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall82"]
+polygon = PoolVector2Array( 12, 0, 7, 0, 7, -6, -1, -6, -1, 0, -6, 0, 3, -11 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall82"]
+polygon = PoolVector2Array( 7, -3, 7, -6, -1, -6, -1, -3 )
+
+[node name="door" parent="foreground/walls/wall82" instance=ExtResource( 1 )]
+position = Vector2( 3, -2 )
+audio_player_path = NodePath("../../../../audio")
+linked_npcs = [ NodePath("../../../npcs/npc20"), NodePath("../../../npcs/npc21") ]
+
+[node name="wall67" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 92, 192 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall67"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall67"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall67"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall67"]
 polygon = PoolVector2Array( 3, 0, 1, 0, 2, 1, 1, 2, 0, 1, -1, 2, -2, 1, -1, 0, -3, 0, -3, -1, 3, -1 )
 
-[node name="fire" parent="walls/wall67" instance=ExtResource( 25 )]
+[node name="fire" parent="foreground/walls/wall67" instance=ExtResource( 25 )]
 
-[node name="wall24" type="StaticBody2D" parent="walls"]
+[node name="wall24" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -16, 104 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall24"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall24"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall24"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall24"]
 polygon = PoolVector2Array( -8, -6, 0, -6, 0, 0, -2, 0, -2, -5, -6, -5, -6, 0, -8, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall24"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall24"]
 polygon = PoolVector2Array( -8, -6, -4, -10, 0, -6, -2, -6, -2, -2, -6, -2, -6, -6 )
 
-[node name="wall25" type="StaticBody2D" parent="walls"]
+[node name="wall25" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -109, 74 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall25"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall25"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall25"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall25"]
 polygon = PoolVector2Array( -1, 16, -3, 14, -9, 14, -9, 6, -3, 6, -3, 4, -31, 4, -31, 16, -19, 16 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall25"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall25"]
 polygon = PoolVector2Array( -3, 4, -11, 0, -19, 4, -25, 1, -31, 4, -9, 4, -9, 14, -6, 14, -6, 4 )
 
-[node name="door" parent="walls/wall25" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall25" instance=ExtResource( 1 )]
 position = Vector2( -5, 10 )
 rotation = -1.5708
+audio_player_path = NodePath("../../../../audio")
 
-[node name="wall21" type="StaticBody2D" parent="walls"]
+[node name="wall21" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 50, -64 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall21"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall21"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall21"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall21"]
 polygon = PoolVector2Array( -18, -19, -8, -19, -8, -14, 8, -14, 8, 0, 0, 0, 0, -6, -8, -6, -8, 0, -18, 0 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall21"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall21"]
 polygon = PoolVector2Array( 8, -14, -8, -19, -13, -21, -18, -19, -18, -14, -8, -14, -8, -3, 0, -3, 0, -14 )
 
-[node name="door" parent="walls/wall21" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall21" instance=ExtResource( 1 )]
 position = Vector2( -4, -2 )
+audio_player_path = NodePath("../../../../audio")
 linked_npcs = [ NodePath("../../../npcs/npc7") ]
 
-[node name="wall36" type="StaticBody2D" parent="walls"]
+[node name="wall36" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 32, -56 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall36"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall36"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall36"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall36"]
 polygon = PoolVector2Array( -7, -2, -7, -3, -5, -5, 2, -5, 4, -3, 7, -3, 7, -2, 6, -1, 5, -1, 4, 0, 3, 0, 2, -1, -2, -1, -3, 0, -4, 0, -5, -1, -6, -1 )
 
-[node name="wall37" type="StaticBody2D" parent="walls"]
+[node name="wall96" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -200, 48 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall96"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall96"]
+polygon = PoolVector2Array( -7, -2, -7, -3, -4, -5, 1, -5, 4, -3, 7, -3, 7, -2, 6, -1, 5, -1, 4, 0, 3, 0, 2, -1, -2, -1, -3, 0, -4, 0, -5, -1, -6, -1 )
+
+[node name="wall79" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -104, 168 )
+scale = Vector2( -1, 1 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall79"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall79"]
+polygon = PoolVector2Array( -7, -2, -7, -3, -6, -4, -7, -5, -6, -6, -5, -5, 2, -5, 4, -3, 7, -3, 7, -2, 6, -1, 5, -1, 4, 0, 3, 0, 2, -1, -2, -1, -3, 0, -4, 0, -5, -1, -6, -1 )
+
+[node name="wall80" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -94, 168 )
+scale = Vector2( -1, 1 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall80"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall80"]
+polygon = PoolVector2Array( 1, 0, 1, -2, -1, -2, -1, -3, -4, -3, -4, 0 )
+
+[node name="wall72" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 112, 216 )
+scale = Vector2( -1, 1 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall72"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall72"]
+polygon = PoolVector2Array( -7, -2, -7, -3, -5, -5, 2, -5, 4, -3, 7, -3, 7, -2, 6, -1, 5, -1, 4, 0, 3, 0, 2, -1, -2, -1, -3, 0, -4, 0, -5, -1, -6, -1 )
+
+[node name="wall37" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -36, 80 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall37"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall37"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall37"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall37"]
 polygon = PoolVector2Array( -7, -2, -7, -5, -5, -7, 3, -7, 7, -3, 7, -2, 6, -1, 5, -1, 4, 0, 3, 0, 2, -1, -2, -1, -3, 0, -4, 0, -5, -1, -6, -1 )
 
-[node name="wall54" type="StaticBody2D" parent="walls"]
+[node name="wall78" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 130, 43 )
+scale = Vector2( -1, 1 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall78"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall78"]
+polygon = PoolVector2Array( -1, -6, -1, -5, 0, -4, 1, -4, 1, -3, 2, -2, 3, -2, 4, -3, 1, -6, 1, -7, 4, -4, 6, -4, 6, -6, 7, -6, 7, -4, 9, -4, 9, -2, 10, -2, 11, -1, 7, -1, 6, -1, 5, 0, 4, 0, 3, -1, 0, -1, -1, 0, -2, 0, -3, -1, -4, -1, -4, -3, -3, -4, -2, -4, -2, -7, 0, -7, 0, -6 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall78"]
+polygon = PoolVector2Array( 1, -7, 0, -7, 0, -6, 1, -6 )
+
+[node name="wall90" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 141, 48 )
+scale = Vector2( -1, 1 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall90"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall90"]
+polygon = PoolVector2Array( 1, 0, 1, -4, -3, -4, -3, -2, -5, -2, -5, 0 )
+
+[node name="wall91" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 131, 32 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall91"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall91"]
+polygon = PoolVector2Array( 1, 0, 1, -4, -3, -4, -3, -2, -5, -2, -5, 0 )
+
+[node name="wall92" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 160, 1.00006 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall92"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall92"]
+polygon = PoolVector2Array( -2, 7, -2.00003, 1.99994, -4.00003, 1.99994, -4, 7 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall92"]
+polygon = PoolVector2Array( -6, -8, -4, -6, -1, -6, -3, -4, -2, -4, 0, -6, 2, -4, -2.00003, -4.00006, -1.00003, -3.00006, 4, -3, 1, -6, 4, -6, 6, -8, 5, -8, 5, -16, 6, -16, 0, -20, -6, -16, -5, -16, -5, -8 )
+
+[node name="wall93" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 166, 1.00006 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall93"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall93"]
+polygon = PoolVector2Array( -4.00003, 1.99994, -4, 7, -3.05176e-05, 6.99994, -3.05176e-05, 3.99994, -2.00003, 3.99994, -2.00003, 1.99994 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall93"]
+polygon = PoolVector2Array( -10, -7.00006, -10, 1.99994, -8.00003, 1.99994, -8.00003, -3.00006, -7.00003, -3.00006, -8.00003, -4.00006, -8.00003, -6.00006, -6, -5, -4, -6, -4.00003, 1.99994, -2.00003, 1.99994, -2.00003, -7.00006 )
+
+[node name="wall57" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 107, 60 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall57"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall57"]
+polygon = PoolVector2Array( 0, -7, 3, -7, 5, -5, 7, -5, 7, -2, 6, -1, 5, -1, 4, 0, 3, 0, 2, -1, -2, -1, -3, 0, -4, 0, -5, -1, -9, -1, -10, 0, -11, 0, -12, -1, -14, -1, -14, -7, -1, -7, -1, -2, 0, -2 )
+
+[node name="wall77" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 138, 66 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall77"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall77"]
+polygon = PoolVector2Array( -4, 0, 0, 4, 2, 4, 4, 2, 4, 0, 0, -4, -1, -3, -2, -4, -1, -5, -9, -13, -13, -9, -5, -1, -4, -2, -3, -1 )
+
+[node name="wall54" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 48, 88 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall54"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall54"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall54"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall54"]
 polygon = PoolVector2Array( -7, -2, -7, -4, -4, -4, -2, -6, 2, -6, 2, -4, 7, -4, 7, -2, 6, -1, 5, -1, 4, 0, 3, 0, 2, -1, -2, -1, -3, 0, -4, 0, -5, -1, -6, -1 )
 
-[node name="wall22" type="StaticBody2D" parent="walls"]
+[node name="wall22" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -145, 17 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall22"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall22"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall22"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall22"]
 polygon = PoolVector2Array( 1, -5, 3, -5, 3, -3, 5, -1, -1, -1, 1, -3 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall22"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall22"]
 polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 2, -15, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -7, -1, -7, -2, -6, -1, -5, 1, -6, 1, -5, 3, -5, 3, -6, 5, -5, 6, -6, 5, -7, 6, -7 )
 
-[node name="wall30" type="StaticBody2D" parent="walls"]
+[node name="wall84" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -210, -47 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall84"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall84"]
+polygon = PoolVector2Array( 1, -5, 3, -5, 3, -1, -1, -1, 1, -3 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall84"]
+polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 2, -15, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -7, -1, -7, -2, -6, -1, -5, 1, -6, 1, -5, 3, -5, 3, -6, 5, -5, 6, -6, 5, -7, 6, -7 )
+
+[node name="wall88" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -189, -76 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall88"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall88"]
+polygon = PoolVector2Array( 1, -5, 3, -5, 3, -3, 5, -1, 1, -1 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall88"]
+polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 2, -15, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -7, -1, -7, -2, -6, -1, -5, 1, -6, 1, -5, 3, -5, 3, -6, 5, -5, 6, -6, 5, -7, 6, -7 )
+
+[node name="wall30" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 52, -14 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall30"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall30"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall30"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall30"]
 polygon = PoolVector2Array( 1, -5, 3, -5, 3, -3, 7, -3, 7, -1, -1, -1, 1, -3 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall30"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall30"]
 polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 2, -15, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -7, -1, -7, -2, -6, -1, -5, 1, -6, 1, -5, 3, -3, 3, -4, 4, -5, 3, -5, 3, -6, 5, -5, 6, -6, 5, -7, 6, -7 )
 
-[node name="wall26" type="StaticBody2D" parent="walls"]
+[node name="wall74" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 58, 23 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall74"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall74"]
+polygon = PoolVector2Array( 1, -5, 2, -5, 3, -1, 0, -1 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall74"]
+polygon = PoolVector2Array( 1, -13, -2, -13, -3, -12, -3, -11, -1, -11, -1, -12, 1, -12, 1, -5, 2, -5, 2, -10, 4, -10, 4, -9, 6, -9, 6, -10, 5, -11, 2, -11, 2, -13 )
+
+[node name="wall76" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -59, 147 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall76"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall76"]
+polygon = PoolVector2Array( 1, -5, 2, -5, 3, -1, 0, -1 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall76"]
+polygon = PoolVector2Array( 1, -13, -2, -13, -3, -12, -3, -11, -1, -11, -1, -12, 1, -12, 1, -5, 2, -5, 2, -10, 4, -10, 4, -9, 6, -9, 6, -10, 5, -11, 2, -11, 2, -13 )
+
+[node name="wall75" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -99, -11 )
+scale = Vector2( -1, 1 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall75"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall75"]
+polygon = PoolVector2Array( 1, -5, 2, -5, 3, -1, 0, -1 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall75"]
+polygon = PoolVector2Array( 1, -13, -2, -13, -3, -12, -3, -11, -1, -11, -1, -12, 1, -12, 1, -5, 2, -5, 2, -10, 4, -10, 4, -9, 6, -9, 6, -10, 5, -11, 2, -11, 2, -13 )
+
+[node name="wall81" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 137, 85 )
+scale = Vector2( -1, 1 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall81"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall81"]
+polygon = PoolVector2Array( 1, -5, 2, -5, 3, -1, 0, -1 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall81"]
+polygon = PoolVector2Array( 1, -13, -2, -13, -3, -12, -3, -11, -1, -11, -1, -12, 1, -12, 1, -5, 2, -5, 2, -10, 4, -10, 4, -9, 6, -9, 6, -10, 5, -11, 2, -11, 2, -13 )
+
+[node name="wall89" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -195, -26 )
+scale = Vector2( -1, 1 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall89"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall89"]
+polygon = PoolVector2Array( 1, -5, 2, -5, 3, -1, 0, -1 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall89"]
+polygon = PoolVector2Array( 1, -13, -2, -13, -3, -12, -3, -11, -1, -11, -1, -12, 1, -12, 1, -5, 2, -5, 2, -10, 4, -10, 4, -9, 6, -9, 6, -10, 5, -11, 2, -11, 2, -13 )
+
+[node name="wall26" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -41, -71 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall26"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall26"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall26"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall26"]
 polygon = PoolVector2Array( 1, -5, 3, -5, 3, -3, 5, -1, -2, -1, -2, -4, 1, -4 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall26"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall26"]
 polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 3, -14, 4, -15, 2, -17, 0, -15, 1, -14, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -8, 0, -8, -1, -7, 0, -6, 1, -7, 1, -5, 3, -5, 3, -7, 4, -6, 5, -7, 4, -8, 6, -8 )
 
-[node name="wall29" type="StaticBody2D" parent="walls"]
+[node name="wall29" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -114, 1 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall29"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall29"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall29"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall29"]
 polygon = PoolVector2Array( 1, -5, 3, -5, 3, -1, -1, -1, 1, -3 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall29"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall29"]
 polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 3, -14, 4, -15, 2, -17, 0, -15, 1, -14, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -8, 0, -8, -1, -7, 0, -6, 1, -7, 1, -5, -1, -5, 1, -4, 1, -3, 3, -5, 3, -7, 4, -6, 5, -7, 4, -8, 6, -8 )
 
-[node name="wall33" type="StaticBody2D" parent="walls"]
+[node name="wall85" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -153, -73 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall85"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall85"]
+polygon = PoolVector2Array( 1, -5, 5, -5, 5, -3, 7, -1, 6, 0, 5, -1, 1, -1, 0, 0, -1, -1, 1, -3 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall85"]
+polygon = PoolVector2Array( 9, -8, 7, -10, 8, -11, 7, -12, 7, -13, 5, -15, 6, -16, 4, -19, 5, -20, 3, -23, 1, -20, 2, -19, 0, -16, 1, -15, -1, -13, -1, -12, -2, -11, -1, -10, -3, -8, -2, -7, -1, -7, 0, -6, 1, -7, 1, -5, -1, -5, 1, -4, 1, -3, 5, -5, 5, -7, 6, -6, 7, -7, 8, -7 )
+
+[node name="wall87" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -203, -69 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall87"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall87"]
+polygon = PoolVector2Array( 1, -5, 5, -5, 5, -3, 7, -1, 6, 0, 5, -1, 1, -1 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall87"]
+polygon = PoolVector2Array( 9, -8, 7, -10, 8, -11, 7, -12, 7, -13, 5, -15, 6, -16, 4, -19, 5, -20, 3, -23, 1, -20, 2, -19, 0, -16, 1, -15, -1, -13, -1, -12, -2, -11, -1, -10, -3, -8, -2, -7, -1, -7, 0, -6, 1, -7, 1, -4, 1, -3, 5, -5, 5, -7, 6, -6, 7, -7, 8, -7 )
+
+[node name="wall33" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -129, 57 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall33"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall33"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall33"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall33"]
 polygon = PoolVector2Array( 1, -5, 3, -5, 3, -3, 5, -1, 1, -1 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall33"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall33"]
 polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 3, -14, 4, -15, 2, -17, 0, -15, 1, -14, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -8, 0, -8, -1, -7, 0, -6, 1, -7, 1, -5, 3, -5, 3, -7, 4, -6, 5, -7, 4, -8, 6, -8 )
 
-[node name="wall34" type="StaticBody2D" parent="walls"]
+[node name="wall34" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -161, 25 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall34"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall34"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall34"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall34"]
 polygon = PoolVector2Array( 1, -5, 3, -5, 3, -1, -1, -1, 1, -3 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall34"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall34"]
 polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 3, -14, 4, -15, 2, -17, 0, -15, 1, -14, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -8, 0, -8, -1, -7, 0, -6, 1, -7, 1, -5, 3, -3, 3, -4, 5, -5, 3, -5, 3, -7, 4, -6, 5, -7, 4, -8, 6, -8 )
 
-[node name="wall27" type="StaticBody2D" parent="walls"]
+[node name="wall27" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -25, -79 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall27"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall27"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall27"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall27"]
 polygon = PoolVector2Array( 11, -8, 10, -7, 9, -8, 1, 0, 0, -1, 7, -8, 5, -10, 7, -12 )
 
-[node name="wall28" type="StaticBody2D" parent="walls"]
+[node name="wall97" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 60, 228 )
+scale = Vector2( -1, 1 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall97"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall97"]
+polygon = PoolVector2Array( 11, -8, 10, -7, 9, -8, 1, 0, 0, -1, 7, -8, 5, -10, 7, -12 )
+
+[node name="wall28" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 15, 105 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall28"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall28"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall28"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall28"]
 polygon = PoolVector2Array( 11, -8, 10, -7, 9, -8, 3, -2, 10, 5, 9, 6, 2, -1, 1, 0, 0, -1, 7, -8, 5, -10, 7, -12 )
 
-[node name="wall31" type="StaticBody2D" parent="walls"]
+[node name="wall31" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -128, 48 )
 rotation = 1.5708
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall31"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall31"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall31"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall31"]
 polygon = PoolVector2Array( 11, -8, 10, -7, 9, -8, 3, -2, 7, 2, 11, -2, 12, -1, 8, 3, 10, 5, 9, 6, 2, -1, 1, 0, 0, -1, 7, -8, 5, -10, 7, -12 )
 
-[node name="wall35" type="StaticBody2D" parent="walls"]
+[node name="wall35" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -152, 16 )
 rotation = 1.5708
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall35"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall35"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall35"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall35"]
 polygon = PoolVector2Array( 0, -15, 1, -16, 8, -9, 6, -7, 16, 3, 11, 8, 12, 9, 10, 11, 9, 10, 7, 12, 6, 11, 8, 9, 7, 8, 9, 6, 10, 7, 14, 3, 5, -6, 4, -5, 2, -7, 5, -10 )
 
-[node name="wall64" type="StaticBody2D" parent="walls"]
+[node name="wall64" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 56, 128 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall64"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall64"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall64"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall64"]
 polygon = PoolVector2Array( 1, -5, 3, -5, 3, -3, 5, -1, -1, -1, 1, -3 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall64"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall64"]
 polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 2, -15, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -7, -1, -7, -2, -6, -1, -5, 1, -6, 1, -5, 3, -5, 3, -6, 5, -5, 6, -6, 5, -7, 6, -7 )
 
-[node name="wall65" type="StaticBody2D" parent="walls"]
+[node name="wall65" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 40, 136 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall65"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall65"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall65"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall65"]
 polygon = PoolVector2Array( 1, -5, 3, -5, 3, -1, -1, -1, 1, -3 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall65"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall65"]
 polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 3, -14, 4, -15, 2, -17, 0, -15, 1, -14, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -8, 0, -8, -1, -7, 0, -6, 1, -7, 1, -5, 3, -3, 3, -4, 5, -5, 3, -5, 3, -7, 4, -6, 5, -7, 4, -8, 6, -8 )
 
-[node name="wall66" type="StaticBody2D" parent="walls"]
+[node name="wall66" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 49, 127 )
 rotation = 1.5708
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall66"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall66"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall66"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall66"]
 polygon = PoolVector2Array( 0, -15, 3.99993, -19, 6.99995, -16, 3.99995, -13, 8, -9, 6, -7, 16, 3, 11, 8, 13, 9.99995, 9.00005, 14, 6, 11, 8, 9, 7, 8, 9, 6, 10, 7, 14, 3, 5, -6, 4, -5, 2, -7, 5, -10 )
 
-[node name="wall68" type="StaticBody2D" parent="walls"]
+[node name="wall68" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 99, 197 )
 rotation = 1.5708
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall68"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall68"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall68"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall68"]
 polygon = PoolVector2Array( 0, -3, 3, -1.52588e-05, 2, 0.999992, -1, -2 )
 
-[node name="wall69" type="StaticBody2D" parent="walls"]
+[node name="wall69" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 83, 197 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall69"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall69"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall69"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall69"]
 polygon = PoolVector2Array( 0, -3, 3, -1.52588e-05, 2, 0.999992, -1, -2 )
 
-[node name="wall38" type="StaticBody2D" parent="walls"]
+[node name="wall38" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 0, 160 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall38"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall38"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall38"]
-polygon = PoolVector2Array( -8, -16, 0, -16, 7, -23, 3, -27, 4, -28, 0, -32, 7, -39, 7, -40, 9, -40, 9, -39, 12, -36, 13, -37, 21, -29, 20, -28, 23, -25, 24, -25, 24, -23, 23, -23, 16, -16, 16, -13, 24, -13, 24, -4, 31, -4, 32, -5, 33, -4, 44, -4, 44, -3, 40, -3, 40, 7, 41, 8, 40, 9, 40, 15, 41, 16, 40, 17, 40, 23, 53, 23, 53, 20, 56, 20, 56, 32, 55, 32, 55, 24, 40, 24, 38, 26, 37, 25, 39, 23, 39, -3, 24, -3, 24, 0, 4, 0, 4, -9, -4, -9, -4, 0, -8, 0, -8, -13, -31, -13, -31, 16, -30, 16, -30, 19, -33, 19, -33, 16, -32, 16, -32, 9, -33, 8, -32, 7, -32, 1, -33, 0, -32, -1, -32, -7, -33, -8, -32, -9, -32, -13, -36, -13, -36, -14, -32, -14, -32, -16, -29, -16, -29, -14, -25, -14, -24, -15, -23, -14, -17, -14, -16, -15, -15, -14, -8, -14 )
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall38"]
+polygon = PoolVector2Array( -8, -16, 0, -16, 7, -23, 3, -27, 4, -28, 0, -32, 7, -39, 7, -40, 9, -40, 9, -39, 12, -36, 13, -37, 21, -29, 20, -28, 23, -25, 24, -25, 24, -23, 23, -23, 16, -16, 16, -13, 24, -13, 24, -9, 23, -9, 23, -7, 24, -7, 24, -4, 31, -4, 32, -5, 33, -4, 44, -4, 44, -3, 40, -3, 40, 7, 41, 8, 40, 9, 40, 15, 41, 16, 40, 17, 40, 23, 53, 23, 53, 20, 56, 20, 56, 32, 55, 32, 55, 24, 40, 24, 38, 26, 37, 25, 39, 23, 39, -3, 24, -3, 24, 0, 4, 0, 4, -9, -4, -9, -4, 0, -8, 0, -8, -13, -31, -13, -31, 16, -30, 17, -30, 18, -31, 19, -32, 19, -33, 18, -33, 17, -32, 16, -32, 9, -33, 8, -32, 7, -32, 1, -33, 0, -32, -1, -32, -7, -33, -8, -32, -9, -32, -13, -36, -13, -36, -14, -32, -14, -32, -16, -29, -16, -29, -14, -25, -14, -24, -15, -23, -14, -17, -14, -16, -15, -15, -14, -8, -14 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall38"]
-polygon = PoolVector2Array( -8, -16, -8, -22, -9, -23, -6, -26, -5, -28, -5, -31, -5, -33, -7, -33, -7, -35, -5, -35, -5, -37, -3, -37, -3, -35, -1, -35, -1, -33, -3, -33, -3, -31, -3, -28, -2, -26, 1, -23, 0, -22, 0, -16, 4, -13, 16, -13, 18, -15, 22, -15, 25, -12, 24, -11, 24, -3, -4, -3, -4, -16 )
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall38"]
+polygon = PoolVector2Array( -8, -16, -8, -22, -9, -23, -6, -26, -5, -28, -5, -31, -5, -33, -7, -33, -7, -35, -5, -35, -5, -37, -3, -37, -3, -35, -1, -35, -1, -33, -3, -33, -3, -31, -3, -28, -2, -26, 1, -23, 0, -22, 0, -16, 4, -13, 16, -13, 18, -15, 22, -15, 25, -12, 24, -11, 24, -9, 23, -9, 23, -7, 24, -7, 24, -3, -4, -3, -4, -16 )
 
-[node name="door" parent="walls/wall38" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall38" instance=ExtResource( 1 )]
 position = Vector2( 0, -2 )
+audio_player_path = NodePath("../../../../audio")
 linked_npcs = [ NodePath("../../../npcs/npc10"), NodePath("../../../npcs/npc11"), NodePath("../../../npcs/npc12"), NodePath("../../../npcs/npc13") ]
 
-[node name="wall39" type="StaticBody2D" parent="walls"]
+[node name="wall39" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -24, 160 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall39"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall39"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall39"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall39"]
 polygon = PoolVector2Array( -2, 0, -2, -3, -1, -4, 1, -4, 2, -3, 2, 0 )
 
-[node name="wall40" type="StaticBody2D" parent="walls"]
+[node name="wall40" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -16, 160 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall40"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall40"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall40"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall40"]
 polygon = PoolVector2Array( -2, 0, -2, -1, -1, -2, 1, -2, 2, -1, 2, 0 )
 
-[node name="wall41" type="StaticBody2D" parent="walls"]
+[node name="wall41" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -16, 168 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall41"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall41"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall41"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall41"]
 polygon = PoolVector2Array( -2, 0, -2, -3, -1, -4, 1, -4, 2, -3, 2, 0 )
 
-[node name="wall42" type="StaticBody2D" parent="walls"]
+[node name="wall42" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -24, 168 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall42"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall42"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall42"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall42"]
 polygon = PoolVector2Array( -2, 0, -2, -3, -1, -4, 1, -4, 2, -3, 2, 0 )
 
-[node name="wall43" type="StaticBody2D" parent="walls"]
+[node name="wall43" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 16, 168 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall43"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall43"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall43"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall43"]
 polygon = PoolVector2Array( -2, 0, -2, -3, -1, -4, 1, -4, 2, -3, 2, 0 )
 
-[node name="wall47" type="StaticBody2D" parent="walls"]
+[node name="wall47" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 8, 168 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall47"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall47"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall47"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall47"]
 polygon = PoolVector2Array( -2, 0, -2, -3, -1, -4, 1, -4, 2, -3, 2, 0 )
 
-[node name="wall44" type="StaticBody2D" parent="walls"]
+[node name="wall44" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 32, 168 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall44"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall44"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall44"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall44"]
 polygon = PoolVector2Array( -2, 0, -2, -3, -1, -4, 0, -3, 0, 0 )
 
-[node name="wall50" type="StaticBody2D" parent="walls"]
+[node name="wall50" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 28, 168 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall50"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall50"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall50"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall50"]
 polygon = PoolVector2Array( -2, 0, -2, -3, -1, -4, 0, -3, 0, 0 )
 
-[node name="wall45" type="StaticBody2D" parent="walls"]
+[node name="wall45" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 32, 176 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall45"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall45"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall45"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall45"]
 polygon = PoolVector2Array( -2, 0, -2, -3, -1, -4, 1, -4, 2, -3, 2, 0 )
 
-[node name="wall46" type="StaticBody2D" parent="walls"]
+[node name="wall46" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 8, 176 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall46"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall46"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall46"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall46"]
 polygon = PoolVector2Array( -2, 0, -2, -1, -1, -2, 1, -2, 2, -1, 2, 0 )
 
-[node name="wall48" type="StaticBody2D" parent="walls"]
+[node name="wall48" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 45, 179 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall48"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall48"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall48"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall48"]
 polygon = PoolVector2Array( 1, -5, 3, -5, 3, -1, -1, -1, 1, -3 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall48"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall48"]
 polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 3, -14, 4, -15, 2, -17, 0, -15, 1, -14, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -8, 0, -8, -1, -7, 0, -6, 1, -7, 1, -5, -1, -5, 1, -4, 1, -3, 3, -5, 3, -7, 4, -6, 5, -7, 4, -8, 6, -8 )
 
-[node name="wall60" type="StaticBody2D" parent="walls"]
+[node name="wall73" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( 131, 197 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall73"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall73"]
+polygon = PoolVector2Array( 1, -5, 3, -5, 3, -3, 5, -1, 1, -1 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall73"]
+polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 3, -14, 4, -15, 2, -17, 0, -15, 1, -14, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -8, 0, -8, -1, -7, 0, -6, 1, -7, 1, -5, 1, -3, 5, -5, 3, -5, 3, -7, 4, -6, 5, -7, 4, -8, 6, -8 )
+
+[node name="wall83" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -157, -37 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall83"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall83"]
+polygon = PoolVector2Array( 1, -5, 3, -5, 3, -3, 5, -1, 1, -1 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall83"]
+polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 3, -14, 4, -15, 2, -17, 0, -15, 1, -14, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -8, 0, -8, -1, -7, 0, -6, 1, -7, 1, -5, 1, -3, 5, -5, 3, -5, 3, -7, 4, -6, 5, -7, 4, -8, 6, -8 )
+
+[node name="wall86" type="StaticBody2D" parent="foreground/walls"]
+position = Vector2( -171, -78 )
+script = ExtResource( 4 )
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall86"]
+
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall86"]
+polygon = PoolVector2Array( 1, -5, 3, -5, 3, -1, -1, -1, 1, -3 )
+
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall86"]
+polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 3, -14, 4, -15, 2, -17, 0, -15, 1, -14, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -8, 0, -8, -1, -7, 0, -6, 1, -7, 1, -5, 1, -3, 3, -5, 3, -7, 4, -6, 5, -7, 4, -8, 6, -8 )
+
+[node name="wall60" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 71, 157 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall60"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall60"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall60"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall60"]
 polygon = PoolVector2Array( 1, -5, 3, -5, 3, -3, 5, -1, 3, 1, 1, -1, -1, -1, 1, -3 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall60"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall60"]
 polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 3, -14, 4, -15, 2, -17, 0, -15, 1, -14, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -8, 0, -8, -1, -7, 0, -6, 1, -7, 1, -3, 3, -5, 3, -7, 4, -6, 5, -7, 4, -8, 6, -8 )
 
-[node name="wall49" type="StaticBody2D" parent="walls"]
+[node name="wall49" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -1, 203 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall49"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall49"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall49"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall49"]
 polygon = PoolVector2Array( 1, -5, 3, -5, 3, -3, 5, -1, -1, -1, 1, -3 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall49"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall49"]
 polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 2, -15, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -7, -1, -7, -2, -6, -1, -5, 1, -6, 1, -5, 3, -5, 3, -6, 5, -5, 6, -6, 5, -7, 6, -7 )
 
-[node name="wall63" type="StaticBody2D" parent="walls"]
+[node name="wall63" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 67, 201 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall63"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall63"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall63"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall63"]
 polygon = PoolVector2Array( 1, -5, 3, -5, 3, -3, 5, -1, 1, -1 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall63"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall63"]
 polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 2, -15, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -7, -1, -7, -2, -6, -1, -5, 1, -6, 1, -5, 3, -5, 3, -6, 5, -5, 6, -6, 5, -7, 6, -7 )
 
-[node name="wall59" type="StaticBody2D" parent="walls"]
+[node name="wall59" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -131, 157 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall59"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall59"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall59"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall59"]
 polygon = PoolVector2Array( 1, -5, 3, -5, 3, -3, 5, -1, 1, -1 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall59"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall59"]
 polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 2, -15, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -7, -1, -7, -2, -6, -1, -5, 1, -6, 1, -5, 3, -5, 3, -6, 5, -5, 6, -6, 5, -7, 6, -7 )
 
-[node name="wall52" type="StaticBody2D" parent="walls"]
+[node name="wall52" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( 40, 192 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall52"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall52"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall52"]
-polygon = PoolVector2Array( -5, -3, -6, -2, -2, 2, -7, 7, -11, 3, -15, 7, -13, 9, -14, 10, -16, 8, -18, 10, -19, 9, -17, 7, -24, 0, -31, 0, -32, 1, -33, 0, -47, 0, -48, 1, -49, 0, -55, 0, -56, 1, -57, 0, -73, 0, -73, 3, -74, 3, -74, -7, -75, -7, -75, -10, -72, -10, -72, -7, -73, -7, -73, -1, -36, -1, -25, -1, -26, -2, -25, -3, -16, 6, -13, 3, -14, 2, -13, 1, -16, -2, -11, -7, -7, -3, -6, -4 )
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall52"]
+polygon = PoolVector2Array( -5, -3, -6, -2, -2, 2, -7, 7, -11, 3, -15, 7, -13, 9, -14, 10, -16, 8, -18, 10, -19, 9, -17, 7, -24, 0, -31, 0, -32, 1, -33, 0, -47, 0, -48, 1, -49, 0, -55, 0, -56, 1, -57, 0, -73, 0, -73, 3, -74, 3, -74, -7, -75, -8, -75, -9, -74, -10, -73, -10, -72, -9, -72, -8, -73, -7, -73, -1, -36, -1, -25, -1, -26, -2, -25, -3, -16, 6, -13, 3, -14, 2, -13, 1, -16, -2, -11, -7, -7, -3, -6, -4 )
 
-[node name="wall51" type="StaticBody2D" parent="walls"]
+[node name="wall51" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -24, 199 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall51"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall51"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall51"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall51"]
 polygon = PoolVector2Array( 1, -5, 3, -5, 3, -3, 5, -1, -2, -1, -2, -4, 1, -4 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall51"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall51"]
 polygon = PoolVector2Array( 7, -9, 5, -10, 6, -11, 4, -12, 5, -13, 3, -14, 4, -15, 2, -17, 0, -15, 1, -14, -1, -13, 0, -12, -2, -11, -1, -10, -3, -9, -2, -8, 0, -8, -1, -7, 0, -6, 1, -7, 1, -5, 3, -5, 3, -7, 4, -6, 5, -7, 4, -8, 6, -8 )
 
-[node name="wall53" type="StaticBody2D" parent="walls"]
+[node name="wall53" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -125, 86 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall53"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall53"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall53"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall53"]
 polygon = PoolVector2Array( -1, 16, -3, 14, -9, 14, -9, 6, -3, 6, -3, 4, -19, 4, -19, -8, -31, -8, -31, 10, -33, 10, -33, 16, -19, 16 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall53"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall53"]
 polygon = PoolVector2Array( -3, 4, -11, 0, -19, 4, -19, -8, -25, -12, -31, -8, -31, 5, -34, 5, -35, 6, -33, 6, -31, 8, -31, 7, -32, 6, -9, 6, -9, 14, -6, 14, -6, 4 )
 
-[node name="door" parent="walls/wall53" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall53" instance=ExtResource( 1 )]
 position = Vector2( -5, 10 )
 rotation = -1.5708
+audio_player_path = NodePath("../../../../audio")
 
-[node name="wall55" type="StaticBody2D" parent="walls"]
+[node name="wall55" type="StaticBody2D" parent="foreground/walls"]
 position = Vector2( -88, 144 )
 script = ExtResource( 4 )
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall55"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/walls/wall55"]
 
-[node name="polygon" type="Polygon2D" parent="walls/wall55"]
+[node name="polygon" type="Polygon2D" parent="foreground/walls/wall55"]
 polygon = PoolVector2Array( -8, -8, 8, -8, 16, -6, 16, -4, 28, -4, 28, -3, 24, -3, 24, 16, 12, 16, 12, 15, 23, 15, 23, -3, 16, -3, 16, 0, 14, 0, 14, -6, 6, -6, 6, 0, -2, 0, -2, 3, -5, 3, -5, 0, -8, 0, -8, -3, -10, -3, -10, 15, 8, 15, 8, 16, -24, 16, -24, 15, -11, 15, -11, 0, -14, 0, -14, -3, -20, -3, -20, -4, -8, -4, -8, -5, -7, -5, -7, -7, -8, -7 )
 
-[node name="polygon2" type="Polygon2D" parent="walls/wall55"]
+[node name="polygon2" type="Polygon2D" parent="foreground/walls/wall55"]
 polygon = PoolVector2Array( -8, -8, 0, -10, 16, -6, 14, -6, 14, -3, 6, -3, 6, -8 )
 
-[node name="door" parent="walls/wall55" instance=ExtResource( 1 )]
+[node name="door" parent="foreground/walls/wall55" instance=ExtResource( 1 )]
 position = Vector2( 10, -2 )
+audio_player_path = NodePath("../../../../audio")
 linked_npcs = [ NodePath("../../../npcs/npc14") ]
 
-[node name="wall56" type="StaticBody2D" parent="walls"]
-position = Vector2( -70, 154 )
-script = ExtResource( 4 )
+[node name="npcs" type="Node2D" parent="foreground"]
 
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall56"]
+[node name="player" parent="foreground/npcs" instance=ExtResource( 2 )]
+audio_player_path = NodePath("../../../audio")
 
-[node name="polygon" type="Polygon2D" parent="walls/wall56"]
-polygon = PoolVector2Array( -2, 2, -2, -1, -1, -2, 1, -2, 1, -1, -1, -1, -1, 0, 1, 0, 1, -2, 2, -1, 2, 2 )
-
-[node name="wall57" type="StaticBody2D" parent="walls"]
-position = Vector2( -83, -14 )
-script = ExtResource( 4 )
-
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall57"]
-
-[node name="polygon" type="Polygon2D" parent="walls/wall57"]
-polygon = PoolVector2Array( -2, 2, -2, -1, -1, -2, 1, -2, 1, -1, -1, -1, -1, 0, 1, 0, 1, -2, 2, -1, 2, 2 )
-
-[node name="wall70" type="StaticBody2D" parent="walls"]
-position = Vector2( -8, -127 )
-script = ExtResource( 4 )
-
-[node name="collision" type="CollisionPolygon2D" parent="walls/wall70"]
-
-[node name="polygon" type="Polygon2D" parent="walls/wall70"]
-polygon = PoolVector2Array( -8, 0, -8, -1, 8, -1, 8, 0 )
-
-[node name="npcs" type="Node2D" parent="."]
-
-[node name="player" parent="npcs" instance=ExtResource( 2 )]
-audio_player_path = NodePath("../../audio")
-
-[node name="npc" parent="npcs" instance=ExtResource( 14 )]
+[node name="npc" parent="foreground/npcs" instance=ExtResource( 14 )]
 position = Vector2( 0, -10 )
 chases_npcs = false
 target_path = NodePath("../../walls/wall2/door")
-audio_player_path = NodePath("../../audio")
 
-[node name="collision" type="CollisionPolygon2D" parent="npcs/npc"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc"]
 polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
 
-[node name="polygon" type="Polygon2D" parent="npcs/npc"]
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc"]
 polygon = PoolVector2Array( 1, -4, -1, -4, -1, -2, -1, -2, -2, -2, -3, -1, -2, -1, -2, 3, -1, 3, 0, 2, 1, 3, 2, 3, 2, -1, 3, -1, 2, -2, 1, -2 )
 
-[node name="npc2" parent="npcs" instance=ExtResource( 14 )]
-position = Vector2( 46, 5 )
+[node name="npc2" parent="foreground/npcs" instance=ExtResource( 14 )]
+position = Vector2( 45, 4 )
 speed = 32
 dialogue_index = 1
 chase_distance = 96
-audio_player_path = NodePath("../../audio")
 
-[node name="collision" type="CollisionPolygon2D" parent="npcs/npc2"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc2"]
 polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
 
-[node name="polygon" type="Polygon2D" parent="npcs/npc2"]
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc2"]
 polygon = PoolVector2Array( -2, -1, -3, 0, -2, 1, -2, 3, -1, 3, 0, 2, 1, 3, 2, 3, 2, 1, 3, 0, -1, 0 )
 
-[node name="npc3" parent="npcs" instance=ExtResource( 14 )]
+[node name="npc3" parent="foreground/npcs" instance=ExtResource( 14 )]
 position = Vector2( -57, -24 )
 speed = 16
 dialogue_index = 6
 chase_distance = 64
 target_path = NodePath("../player")
-audio_player_path = NodePath("../../audio")
 
-[node name="collision" type="CollisionPolygon2D" parent="npcs/npc3"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc3"]
 polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
 
-[node name="polygon" type="Polygon2D" parent="npcs/npc3"]
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc3"]
 polygon = PoolVector2Array( 1, -3, -1, -3, -1, -1, -2, -1, -1, 0, -1, 3, 0, 2, 1, 3, 1, 0, 2, -1, 1, -1 )
 
-[node name="npc4" parent="npcs" instance=ExtResource( 14 )]
+[node name="npc4" parent="foreground/npcs" instance=ExtResource( 14 )]
 position = Vector2( -59, -24 )
 speed = 24
 dialogue_index = 6
 chase_distance = 64
 target_path = NodePath("../player")
-audio_player_path = NodePath("../../audio")
 
-[node name="collision" type="CollisionPolygon2D" parent="npcs/npc4"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc4"]
 polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
 
-[node name="polygon" type="Polygon2D" parent="npcs/npc4"]
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc4"]
 polygon = PoolVector2Array( -1, -1, -1, 0, -2, 0, -1, 1, -1, 3, 0, 2, 1, 3, 1, 1, 2, 0, 1, 0, 1, -1 )
 
-[node name="npc5" parent="npcs" instance=ExtResource( 14 )]
+[node name="npc20" parent="foreground/npcs" instance=ExtResource( 14 )]
+position = Vector2( -188, -50 )
+speed = 16
+dialogue_index = 4
+chase_distance = 64
+target_path = NodePath("../player")
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc20"]
+polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
+
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc20"]
+polygon = PoolVector2Array( 1, -3, -1, -3, -1, -1, -2, -1, -1, 0, -1, 3, 0, 2, 1, 3, 1, 0, 2, -1, 1, -1 )
+
+[node name="npc21" parent="foreground/npcs" instance=ExtResource( 14 )]
+position = Vector2( -190, -50 )
+speed = 24
+dialogue_index = 4
+chase_distance = 64
+target_path = NodePath("../player")
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc21"]
+polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
+
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc21"]
+polygon = PoolVector2Array( -1, -1, -1, 0, -2, 0, -1, 1, -1, 3, 0, 2, 1, 3, 1, 1, 2, 0, 1, 0, 1, -1 )
+
+[node name="npc16" parent="foreground/npcs" instance=ExtResource( 14 )]
+position = Vector2( 78, 74 )
+speed = 24
+dialogue_index = 6
+chase_distance = 64
+target_path = NodePath("../player")
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc16"]
+polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
+
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc16"]
+polygon = PoolVector2Array( -1, -1, -1, 0, -2, 0, -1, 1, -1, 3, 0, 2, 1, 3, 1, 1, 2, 0, 1, 0, 1, -1 )
+
+[node name="npc5" parent="foreground/npcs" instance=ExtResource( 14 )]
 position = Vector2( -83, 90 )
 speed = 16
 dialogue_index = 5
 chase_distance = 64
 target_path = NodePath("../player")
-audio_player_path = NodePath("../../audio")
 
-[node name="collision" type="CollisionPolygon2D" parent="npcs/npc5"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc5"]
 polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
 
-[node name="polygon" type="Polygon2D" parent="npcs/npc5"]
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc5"]
 polygon = PoolVector2Array( 1, -3, -1, -3, -1, -1, -2, -1, -1, 0, -1, 3, 0, 2, 1, 3, 1, 0, 2, -1, 1, -1 )
 
-[node name="npc6" parent="npcs" instance=ExtResource( 14 )]
+[node name="npc15" parent="foreground/npcs" instance=ExtResource( 14 )]
+position = Vector2( -168, -66 )
+speed = 16
+dialogue_index = 12
+chase_distance = 64
+target_path = NodePath("../player")
+gun_path = NodePath("gun")
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc15"]
+polygon = PoolVector2Array( 1, 0, 1, 2, -1, 2, -1, 0 )
+
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc15"]
+polygon = PoolVector2Array( 1, -3, -1, -3, -1, -1, -2, -1, -1, 0, -1, 3, 0, 2, 1, 3, 1, 0, 2, -1, 1, -1 )
+
+[node name="gun" parent="foreground/npcs/npc15" instance=ExtResource( 30 )]
+audio_player_path = NodePath("../../../../audio")
+speed = 64
+fire_rate = 150
+ammo = 16
+
+[node name="npc6" parent="foreground/npcs" instance=ExtResource( 14 )]
 position = Vector2( -20, 99 )
 speed = 32
 dialogue_index = 1
 chase_distance = 96
-audio_player_path = NodePath("../../audio")
 
-[node name="collision" type="CollisionPolygon2D" parent="npcs/npc6"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc6"]
 polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
 
-[node name="polygon" type="Polygon2D" parent="npcs/npc6"]
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc6"]
 polygon = PoolVector2Array( -2, -1, -3, 0, -2, 1, -2, 3, -1, 3, 0, 2, 1, 3, 2, 3, 2, 1, 3, 0, -1, 0 )
 
-[node name="npc7" parent="npcs" instance=ExtResource( 14 )]
+[node name="npc7" parent="foreground/npcs" instance=ExtResource( 14 )]
 position = Vector2( 46, -70 )
 speed = 4
 dialogue_index = 7
 chase_distance = 32
 target_path = NodePath("../player")
-audio_player_path = NodePath("../../audio")
 
-[node name="collision" type="CollisionPolygon2D" parent="npcs/npc7"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc7"]
 polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
 
-[node name="polygon" type="Polygon2D" parent="npcs/npc7"]
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc7"]
 polygon = PoolVector2Array( 1, -3, -1, -3, -2, -1, -2, 0, -1, 0, -2, 1, -1, 1, -1, 3, 0, 2, 1, 3, 1, 1, 2, 1, 1, 0, 2, 0, 2, -1 )
 
-[node name="npc8" parent="npcs" instance=ExtResource( 14 )]
+[node name="npc17" parent="foreground/npcs" instance=ExtResource( 14 )]
+position = Vector2( 91, 166 )
+speed = 16
+dialogue_index = 13
+chase_distance = 64
+target_path = NodePath("../player")
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc17"]
+polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
+
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc17"]
+polygon = PoolVector2Array( 1, -3, -1, -3, -2, -1, -2, 0, -1, 0, -2, 1, -1, 1, -1, 3, 0, 2, 1, 3, 1, 1, 2, 1, 1, 0, 2, 0, 2, -1 )
+
+[node name="npc8" parent="foreground/npcs" instance=ExtResource( 14 )]
 position = Vector2( -92, -60 )
 dialogue_index = 9
 chase_distance = 32
 target_path = NodePath("../player")
-audio_player_path = NodePath("../../audio")
 
-[node name="collision" type="CollisionPolygon2D" parent="npcs/npc8"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc8"]
 polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
 
-[node name="polygon" type="Polygon2D" parent="npcs/npc8"]
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc8"]
 polygon = PoolVector2Array( 2, -2, -2, -2, -1, 0, -2, 2, -1, 1, -1, 3, 0, 2, 1, 3, 1, 1, 2, 2, 1, 0 )
 
-[node name="npc9" parent="npcs" instance=ExtResource( 14 )]
+[node name="npc19" parent="foreground/npcs" instance=ExtResource( 14 )]
+position = Vector2( -116, 138 )
+dialogue_index = 9
+chase_distance = 32
+target_path = NodePath("../player")
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc19"]
+polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
+
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc19"]
+polygon = PoolVector2Array( 2, -2, -2, -2, -1, 0, -2, 2, -1, 1, -1, 3, 0, 2, 1, 3, 1, 1, 2, 2, 1, 0 )
+
+[node name="npc9" parent="foreground/npcs" instance=ExtResource( 14 )]
 position = Vector2( 61, 74 )
 speed = 16
 dialogue_index = 8
 chase_distance = 64
 target_path = NodePath("../player")
-audio_player_path = NodePath("../../audio")
 
-[node name="collision" type="CollisionPolygon2D" parent="npcs/npc9"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc9"]
 polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
 
-[node name="polygon" type="Polygon2D" parent="npcs/npc9"]
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc9"]
 polygon = PoolVector2Array( 1, -2, -1, -2, -1, -1, -2, 0, -1, 1, -1, 3, 0, 2, 1, 3, 1, 1, 2, 0, 1, -1 )
 
-[node name="npc10" parent="npcs" instance=ExtResource( 14 )]
+[node name="npc10" parent="foreground/npcs" instance=ExtResource( 14 )]
 position = Vector2( -3, 154 )
 speed = 16
 dialogue_index = 10
 chase_distance = 64
 target_path = NodePath("../player")
-audio_player_path = NodePath("../../audio")
 
-[node name="collision" type="CollisionPolygon2D" parent="npcs/npc10"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc10"]
 polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
 
-[node name="polygon" type="Polygon2D" parent="npcs/npc10"]
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc10"]
 polygon = PoolVector2Array( 1, -2, -1, -2, -1, -1, -2, 0, -1, 1, -2, 3, 2, 3, 1, 1, 2, 0, 1, -1 )
 
-[node name="npc11" parent="npcs" instance=ExtResource( 14 )]
+[node name="npc11" parent="foreground/npcs" instance=ExtResource( 14 )]
 position = Vector2( -1, 151 )
 dialogue_index = 10
 chase_distance = 32
 target_path = NodePath("../player")
-audio_player_path = NodePath("../../audio")
 
-[node name="collision" type="CollisionPolygon2D" parent="npcs/npc11"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc11"]
 polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
 
-[node name="polygon" type="Polygon2D" parent="npcs/npc11"]
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc11"]
 polygon = PoolVector2Array( 1, -2, -1, -2, -1, -1, -2, 0, -1, 1, -2, 3, 2, 3, 1, 1, 2, 0, 1, -1 )
 
-[node name="npc12" parent="npcs" instance=ExtResource( 14 )]
+[node name="npc12" parent="foreground/npcs" instance=ExtResource( 14 )]
 position = Vector2( 1, 154 )
 speed = 24
 dialogue_index = 10
 chase_distance = 64
 target_path = NodePath("../player")
-audio_player_path = NodePath("../../audio")
 
-[node name="collision" type="CollisionPolygon2D" parent="npcs/npc12"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc12"]
 polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
 
-[node name="polygon" type="Polygon2D" parent="npcs/npc12"]
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc12"]
 polygon = PoolVector2Array( 1, -1, -1, -1, -1, 1, -2, 1, -1, 2, -2, 3, 2, 3, 1, 2, 2, 1, 1, 1 )
 
-[node name="npc13" parent="npcs" instance=ExtResource( 14 )]
+[node name="npc13" parent="foreground/npcs" instance=ExtResource( 14 )]
 position = Vector2( 3, 151 )
 speed = 4
 dialogue_index = 10
 chase_distance = 32
 target_path = NodePath("../player")
-audio_player_path = NodePath("../../audio")
 
-[node name="collision" type="CollisionPolygon2D" parent="npcs/npc13"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc13"]
 polygon = PoolVector2Array( -1, 0, 1, 0, 1, 2, -1, 2 )
 
-[node name="polygon" type="Polygon2D" parent="npcs/npc13"]
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc13"]
 polygon = PoolVector2Array( 1, -2, -1, -2, -1, -1, -2, 0, -1, 1, -2, 3, 2, 3, 1, 1, 2, 0, 1, -1 )
 
-[node name="npc14" parent="npcs" instance=ExtResource( 14 )]
+[node name="npc14" parent="foreground/npcs" instance=ExtResource( 14 )]
 position = Vector2( -78, 138 )
 speed = 16
 dialogue_index = 11
 chase_distance = 64
 target_path = NodePath("../player")
-audio_player_path = NodePath("../../audio")
 
-[node name="collision" type="CollisionPolygon2D" parent="npcs/npc14"]
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc14"]
 polygon = PoolVector2Array( -2, 0, 2, 0, 2, 2, -2, 2 )
 
-[node name="polygon" type="Polygon2D" parent="npcs/npc14"]
-polygon = PoolVector2Array( 1, -1, -1, -1, -1, 0, -4, 0, -3, 1, -3, 2, -2, 2, -2, 3, -1, 3, 0, 2, 1, 3, 2, 3, 2, 2, 3, 2, 3, 1, 4, 0, 1, 0 )
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc14"]
+polygon = PoolVector2Array( 1, -1, -1, -1, -1, 0, -3, 0, -2, 1, -2, 3, -1, 3, 0, 2, 1, 3, 2, 3, 2, 1, 3, 0, 1, 0 )
+
+[node name="npc18" parent="foreground/npcs" instance=ExtResource( 14 )]
+position = Vector2( 26, 74 )
+speed = 16
+dialogue_index = 11
+chase_distance = 64
+target_path = NodePath("../player")
+
+[node name="collision" type="CollisionPolygon2D" parent="foreground/npcs/npc18"]
+polygon = PoolVector2Array( -2, 0, 2, 0, 2, 2, -2, 2 )
+
+[node name="polygon" type="Polygon2D" parent="foreground/npcs/npc18"]
+polygon = PoolVector2Array( 1, -1, -1, -1, -1, 0, -3, 0, -2, 1, -2, 3, -1, 3, 0, 2, 1, 3, 2, 3, 2, 1, 3, 0, 1, 0 )

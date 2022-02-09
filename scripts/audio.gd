@@ -1,11 +1,13 @@
 extends AudioStreamPlayer
 
+export (Array, Resource) var upgrades
 export (Array, Resource) var dialogue
 export (Array, Resource) var door_unlocks
 export (Array, Resource) var door_knocks
+export (Array, Resource) var gunshots
 export (Array, Resource) var footsteps
 
-onready var request_priority := [dialogue, door_unlocks, door_knocks, footsteps]
+onready var request_priority := [upgrades, dialogue, door_unlocks, door_knocks, gunshots, footsteps]
 
 func request(request: Array) -> void:
 	if !playing:

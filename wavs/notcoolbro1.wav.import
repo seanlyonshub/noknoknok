@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/notcoolbro1.wav-bc7254c4979a4976a7c7be0354460552.sample"
+
+[deps]
+
+source_file="res://wavs/notcoolbro1.wav"
+dest_files=[ "res://.import/notcoolbro1.wav-bc7254c4979a4976a7c7be0354460552.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=true
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop=false
+compress/mode=0

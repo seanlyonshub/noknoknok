@@ -7,7 +7,7 @@ export (bool) var chases_npcs = true
 export (int) var chase_distance
 
 export (NodePath) var target_path = null
-export (NodePath) var audio_player_path
+export (NodePath) var gun_path = null
 
 var velocity : Vector2
 var random_velocity : Vector2
@@ -16,11 +16,14 @@ var target_position : Vector2
 var dead := false
 
 var target
-var target_index : int
+var gun
 var home
+
+var target_index : int
 var timer : int
 
-onready var audio_player = get_node(audio_player_path)
+onready var audio_player = self.owner.get_node("audio")
+onready var upgrades = get_parent().get_parent().get_node("upgrades")
 onready var animations = get_node("animations")
 onready var ray = get_node("ray")
 
@@ -29,6 +32,8 @@ func _ready() -> void:
 
 	if target_path != null:
 		target = get_node(target_path)
+	if gun_path != null:
+		gun = get_node(gun_path)
 
 func awaken() -> void:
 	if !is_physics_processing():
@@ -47,12 +52,18 @@ func kill() -> void:
 		dead = true
 
 func has_killed() -> void:
+	upgrades.place_upgrade(position)
 	get_parent().remove_child(self)
 	queue_free()
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
+	if dead:
+		return
+
 	chase_target()
 	wander()
+
+	timer += 1
 
 	velocity = move_and_slide(velocity)
 
@@ -75,8 +86,7 @@ func wander() -> void:
 	ray.cast_to = target_position - position
 
 	if is_ray_casting_at_wall():
-		timer += 1
-		if timer % 60 == 0:
+		if timer % 30 == 0:
 			randomize()
 
 			var rand_nums = [-1, 1]
@@ -98,6 +108,16 @@ func chase_target() -> void:
 			else:
 				velocity = Vector2.ZERO
 
+		if is_instance_valid(gun):
+			if gun.ammo > 0:
+				if !is_ray_casting_at_wall() and position.distance_to(target_position) < chase_distance:
+					if timer % gun.fire_rate == 0:
+						gun.shoot()
+
+			else:
+				remove_child(gun)
+				gun.queue_free()
+
 	else:
 		if chases_npcs and target_path == null:
 			get_next_target()
@@ -106,10 +126,11 @@ func chase_target() -> void:
 
 func get_next_target() -> void:
 	var npcs = get_parent().get_children()
+	npcs.erase(self)
 
 	target_index = wrapi(target_index, 0, npcs.size())
 
-	if position.distance_to(npcs[target_index].position) < chase_distance:
+	if position.distance_to(npcs[target_index].position) < chase_distance and npcs[target_index].is_physics_processing():
 		target = npcs[target_index]
 	else:
 		target_index += 1
