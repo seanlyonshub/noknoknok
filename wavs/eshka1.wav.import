@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/eshka1.wav-0d83f4829edd9c559efe0ca3a42750d8.sample"
+
+[deps]
+
+source_file="res://wavs/eshka1.wav"
+dest_files=[ "res://.import/eshka1.wav-0d83f4829edd9c559efe0ca3a42750d8.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=true
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop=false
+compress/mode=0

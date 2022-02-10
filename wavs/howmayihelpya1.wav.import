@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/howmayihelpya1.wav-39d516e05df8f55c207d3769055e66ed.sample"
+
+[deps]
+
+source_file="res://wavs/howmayihelpya1.wav"
+dest_files=[ "res://.import/howmayihelpya1.wav-39d516e05df8f55c207d3769055e66ed.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=true
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop=false
+compress/mode=0

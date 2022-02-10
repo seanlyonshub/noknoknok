@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/baby1.wav-d95150158c23b7a5d5379e0ed694ec3b.sample"
+
+[deps]
+
+source_file="res://wavs/baby1.wav"
+dest_files=[ "res://.import/baby1.wav-d95150158c23b7a5d5379e0ed694ec3b.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=true
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop=false
+compress/mode=0

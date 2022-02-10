@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/typewriter1.wav-3334034827d134008076f61f0befa910.sample"
+
+[deps]
+
+source_file="res://wavs/typewriter1.wav"
+dest_files=[ "res://.import/typewriter1.wav-3334034827d134008076f61f0befa910.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=true
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=false
+edit/loop=false
+compress/mode=0
