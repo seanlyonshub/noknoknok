@@ -9,8 +9,10 @@ onready var collision = get_node("collision")
 onready var polygon = get_node("polygon")
 onready var animations = get_node("animations")
 onready var audio_player = get_node(audio_player_path)
+onready var root = self.owner
 
 func _ready() -> void:
+	root.total_doors.append(self)
 	collision.polygon = polygon.polygon
 
 func knock() -> void:
@@ -31,6 +33,7 @@ func has_knocked() -> void:
 		unlock()
 
 func has_unlocked() -> void:
+	root.add_doors_unlocked()
 	animations_free = true
 	if !linked_npcs.empty():
 		for linked_npc in linked_npcs:

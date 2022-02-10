@@ -12,6 +12,9 @@ config_version=4
 
 config/name="noknoknok"
 run/main_scene="res://scenes/root.tscn"
+boot_splash/image="res://splash.png"
+boot_splash/use_filter=false
+boot_splash/bg_color=Color( 0.780392, 0.941176, 0.847059, 1 )
 config/icon="res://icon.png"
 
 [display]

@@ -112,7 +112,7 @@ __meta__ = {
 polygon = PoolVector2Array( -1, 0, 0, 1, 1, 0, 0, -1 )
 
 [node name="polygon" type="Polygon2D" parent="."]
-polygon = PoolVector2Array( -2, 0, 0, 2, 2, 0, 1, 0, 0, 1, -1, 0, 0, -1, 1, 0, 2, 0, 0, -2 )
+polygon = PoolVector2Array( -1, 0, 0, -1, 1, 0, 2, 0, 0, -2, -2, 0, 0, 2, 2, 0, 1, 0, 0, 1 )
 
 [node name="animations" type="AnimationPlayer" parent="."]
 anims/RESET = SubResource( 1 )

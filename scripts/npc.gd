@@ -4,14 +4,15 @@ export (int) var speed
 export (int) var dialogue_index
 
 export (bool) var awake = false
+export (String) var npc_type = "enemy"
 export (bool) var chases_npcs = true
-export (int) var chase_distance
+export (int) var chase_distance = 32
 
 export (NodePath) var target_path = null
 export (NodePath) var gun_path = null
 
 var velocity : Vector2
-var random_velocity : Vector2
+var direction : Vector2
 var target_position : Vector2
 
 var dead := false
@@ -62,15 +63,18 @@ func _physics_process(_delta: float) -> void:
 	if dead:
 		return
 
-	target_index = wrapi(target_index, 0, get_parent().get_children().size())
+	if !is_ray_casting_at_wall():
+		chase_target()
+	else:
+		wander()
 
-	chase_target()
-	wander()
-
-	print(name, ": ", rad2deg(ray.cast_to.angle()))
+	if is_instance_valid(target):
+		target_position = target.position
+		ray.cast_to = target_position - position
 
 	timer += 1
 
+	velocity = direction * speed
 	velocity = move_and_slide(velocity)
 
 	if get_collider() != null:
@@ -88,9 +92,16 @@ func _physics_process(_delta: float) -> void:
 				kill()
 				get_collider().kill()
 
+	if npc_type == "ghost":
+		chase_target()
+		for npc in get_parent().get_children():
+				if is_node_npc(npc):
+					if npc.is_physics_processing():
+						if npc.npc_type == "priest":
+							if position.distance_to(npc.position) < 8:
+								kill()
+
 func wander() -> void:
-	ray.cast_to = target_position - position
-	if is_ray_casting_at_wall():
 		if timer % 60 == 0:
 			randomize()
 
@@ -98,17 +109,14 @@ func wander() -> void:
 			var rand_x = rand_nums[randi() % rand_nums.size()]
 			var rand_y = rand_nums[randi() % rand_nums.size()]
 
-			random_velocity = Vector2(rand_x, rand_y) * speed
-	else:
-		random_velocity = Vector2.ZERO
+			direction = Vector2(rand_x, rand_y)
 
 func chase_target() -> void:
 	if is_instance_valid(target):
-		target_position = target.position
-		velocity = ((target_position - position).normalized() * speed) + random_velocity
+		direction = ray.cast_to.normalized()
 
 		if position.distance_to(target_position) > chase_distance and chase_distance != 0:
-			if target_path == null:
+			if npc_type == "dog":
 				get_next_target()
 			else:
 				velocity = Vector2.ZERO
@@ -124,31 +132,26 @@ func chase_target() -> void:
 				gun.queue_free()
 
 	else:
-		if chases_npcs and target_path == null:
+		if chases_npcs and npc_type == "dog":
 			get_next_target()
 		else:
 			target = home
 
 func get_next_target() -> void:
 	var npcs = get_parent().get_children()
+	npcs.erase(self)
+
+	target_index = wrapi(target_index, 0, npcs.size())
+
 	var next_target = npcs[target_index]
 
-	if next_target.is_physics_processing():
-		if is_node_npc(next_target):
-			if next_target.target_path != null:
-				target = next_target
-			else:
-				target_index += 1
-		else:
-			target = next_target
+	if next_target.is_physics_processing() and position.distance_to(next_target.position) < chase_distance:
+		target = next_target
 	else:
 		target_index += 1
 
-	if position.distance_to(next_target.position) > chase_distance:
-		target_index += 1
-
 func is_node_npc(node) -> bool:
-	if node.name.rstrip("0123456789") == "npc":
+	if "npc_type" in node:
 		return true
 	return false
 
