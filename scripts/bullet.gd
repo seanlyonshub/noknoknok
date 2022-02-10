@@ -9,19 +9,14 @@ func _physics_process(_delta: float) -> void:
 	velocity = move_and_slide(velocity)
 
 	if get_collider() != null:
-		print(get_collider().name)
+		kill()
 		match get_collider().name.rstrip("0123456789"):
 			"npc":
 				get_collider().kill()
-				kill()
 			"player":
 				get_collider().kill()
-				kill()
 			"door":
 				get_collider().knock()
-				kill()
-			"wall":
-				kill()
 
 func kill() -> void:
 	if !dead:

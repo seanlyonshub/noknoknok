@@ -3,6 +3,7 @@ extends KinematicBody2D
 export (int) var speed
 export (int) var dialogue_index
 
+export (bool) var awake = false
 export (bool) var chases_npcs = true
 export (int) var chase_distance
 
@@ -28,7 +29,8 @@ onready var animations = get_node("animations")
 onready var ray = get_node("ray")
 
 func _ready() -> void:
-	set_physics_process(false)
+	if !awake:
+		set_physics_process(false)
 
 	if target_path != null:
 		target = get_node(target_path)
@@ -60,8 +62,12 @@ func _physics_process(_delta: float) -> void:
 	if dead:
 		return
 
+	target_index = wrapi(target_index, 0, get_parent().get_children().size())
+
 	chase_target()
 	wander()
+
+	print(name, ": ", rad2deg(ray.cast_to.angle()))
 
 	timer += 1
 
@@ -84,9 +90,8 @@ func _physics_process(_delta: float) -> void:
 
 func wander() -> void:
 	ray.cast_to = target_position - position
-
 	if is_ray_casting_at_wall():
-		if timer % 30 == 0:
+		if timer % 60 == 0:
 			randomize()
 
 			var rand_nums = [-1, 1]
@@ -126,14 +131,26 @@ func chase_target() -> void:
 
 func get_next_target() -> void:
 	var npcs = get_parent().get_children()
-	npcs.erase(self)
+	var next_target = npcs[target_index]
 
-	target_index = wrapi(target_index, 0, npcs.size())
-
-	if position.distance_to(npcs[target_index].position) < chase_distance and npcs[target_index].is_physics_processing():
-		target = npcs[target_index]
+	if next_target.is_physics_processing():
+		if is_node_npc(next_target):
+			if next_target.target_path != null:
+				target = next_target
+			else:
+				target_index += 1
+		else:
+			target = next_target
 	else:
 		target_index += 1
+
+	if position.distance_to(next_target.position) > chase_distance:
+		target_index += 1
+
+func is_node_npc(node) -> bool:
+	if node.name.rstrip("0123456789") == "npc":
+		return true
+	return false
 
 func get_collider():
 	for collision_index in get_slide_count():
