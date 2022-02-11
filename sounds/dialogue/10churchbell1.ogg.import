@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/10churchbell1.ogg-d6e9bd95a80ef99bee682669880e597c.oggstr"
+
+[deps]
+
+source_file="res://sounds/dialogue/10churchbell1.ogg"
+dest_files=[ "res://.import/10churchbell1.ogg-d6e9bd95a80ef99bee682669880e597c.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

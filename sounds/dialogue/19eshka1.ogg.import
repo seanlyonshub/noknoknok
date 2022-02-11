@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/19eshka1.ogg-18f0e0643ea3bb4a93becfa90f6a5a17.oggstr"
+
+[deps]
+
+source_file="res://sounds/dialogue/19eshka1.ogg"
+dest_files=[ "res://.import/19eshka1.ogg-18f0e0643ea3bb4a93becfa90f6a5a17.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

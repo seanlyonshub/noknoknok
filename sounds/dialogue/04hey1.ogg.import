@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/04hey1.ogg-b627326b8bcd492e83f1f28409078afa.oggstr"
+
+[deps]
+
+source_file="res://sounds/dialogue/04hey1.ogg"
+dest_files=[ "res://.import/04hey1.ogg-b627326b8bcd492e83f1f28409078afa.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

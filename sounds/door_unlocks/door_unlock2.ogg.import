@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/door_unlock2.ogg-ff7f1971c7f376c2456b86b69f4de76e.oggstr"
+
+[deps]
+
+source_file="res://sounds/door_unlocks/door_unlock2.ogg"
+dest_files=[ "res://.import/door_unlock2.ogg-ff7f1971c7f376c2456b86b69f4de76e.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

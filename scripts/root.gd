@@ -9,6 +9,7 @@ var time_in_minutes : int
 var string_seconds : String = "00"
 
 onready var animations = get_node("animations")
+onready var audio = get_node("audio")
 onready var background = get_node("camera")
 onready var foreground = get_node("foreground")
 onready var timer = get_node("timer")
@@ -26,7 +27,9 @@ func _ready() -> void:
 	ui.get_node("timer").text = str(time_in_minutes) + ":" + string_seconds
 
 func invert_palette() -> void:
-	animations.play("shake")
+	if !animations.is_playing():
+		animations.play("shake")
+
 	palette.invert()
 	palette[0].modulate = background_color
 	palette[1].modulate = foreground_color
@@ -34,11 +37,12 @@ func invert_palette() -> void:
 func add_doors_unlocked() -> void:
 	doors_unlocked += 1
 	ui.get_node("doors_unlocked").text = str(doors_unlocked) + "/" + str(total_doors.size())
-	
-	animations.play("add_doors_unlocked")
+
+	if !animations.is_playing():
+		animations.play("add_doors_unlocked")
 
 	if doors_unlocked == total_doors.size():
-		print("well done")
+		get_tree().reload_current_scene()
 
 func has_second_passed() -> void:
 	time_in_seconds += 1

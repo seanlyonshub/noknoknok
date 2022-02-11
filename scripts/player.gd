@@ -50,10 +50,10 @@ func _physics_process(_delta: float) -> void:
 			"fire":
 				kill()
 				get_collider().kill()
-			"upgrade":
-				if !get_collider().dead:
-					process_upgrade(get_collider())
-					get_collider().kill()
+		if is_node_upgrade(get_collider()):
+			if !get_collider().dead:
+				process_upgrade(get_collider())
+				get_collider().kill()
 
 	velocity = move_and_slide(velocity)
 
@@ -82,6 +82,11 @@ func get_collision_normal():
 		if collision != null:
 			return collision.normal
 	return null
+
+func is_node_upgrade(node) -> bool:
+	if "type_index" in node:
+		return true
+	return false
 
 func process_upgrade(upgrade) -> void:
 	root.animations.play("shake")

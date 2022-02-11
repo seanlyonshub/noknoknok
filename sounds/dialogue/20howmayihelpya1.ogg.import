@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/20howmayihelpya1.ogg-3a24f03abe4a3ed91d23d3f44c8cefac.oggstr"
+
+[deps]
+
+source_file="res://sounds/dialogue/20howmayihelpya1.ogg"
+dest_files=[ "res://.import/20howmayihelpya1.ogg-3a24f03abe4a3ed91d23d3f44c8cefac.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

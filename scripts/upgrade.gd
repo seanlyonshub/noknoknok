@@ -7,7 +7,6 @@ onready var audio_player = get_parent().owner.get_node("audio")
 onready var animations = get_node("animations")
 
 func _ready() -> void:
-	name = ("upgrade" + str(get_parent().get_children().find(self)))
 	animations.play("rotate")
 
 func kill() -> void:

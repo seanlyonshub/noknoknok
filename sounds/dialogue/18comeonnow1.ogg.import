@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/18comeonnow1.ogg-5490d9d44f8d527fd7d1688f5a7800c2.oggstr"
+
+[deps]
+
+source_file="res://sounds/dialogue/18comeonnow1.ogg"
+dest_files=[ "res://.import/18comeonnow1.ogg-5490d9d44f8d527fd7d1688f5a7800c2.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

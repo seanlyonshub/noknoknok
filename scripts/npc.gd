@@ -121,7 +121,6 @@ func chase_target() -> void:
 
 		if position.distance_to(target_position) > chase_distance:
 			if npc_type == "dog":
-				print(name, "awa: ", target)
 				get_next_target()
 			else:
 				direction = Vector2.ZERO

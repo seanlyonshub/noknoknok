@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/22hello3.ogg-a7dac0779f03f9cfcfe3309ba46aae85.oggstr"
+
+[deps]
+
+source_file="res://sounds/dialogue/22hello3.ogg"
+dest_files=[ "res://.import/22hello3.ogg-a7dac0779f03f9cfcfe3309ba46aae85.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0
