@@ -9,6 +9,7 @@ var velocity : Vector2
 
 var timer : int
 var can_timer : bool
+var killed := false
 var dead := false
 
 var inputs = ["right", "left", "down", "up"]
@@ -27,6 +28,8 @@ func _physics_process(_delta: float) -> void:
 		if Input.is_action_just_pressed(input):
 			can_timer = true
 			audio_player.request(audio_player.footsteps)
+			if dead and killed:
+				get_tree().reload_current_scene()
 
 		if can_timer:
 			timer += 1
@@ -67,7 +70,7 @@ func kill() -> void:
 		dead = true
 
 func has_killed() -> void:
-	get_tree().reload_current_scene()
+	killed = true
 
 func get_collider():
 	for collision_index in get_slide_count():
