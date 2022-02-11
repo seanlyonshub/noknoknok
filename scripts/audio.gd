@@ -2,7 +2,6 @@ extends AudioStreamPlayer
 
 export (String) var sounds_path
 
-onready var ui = list_sounds_in_directory(sounds_path + "ui/")
 onready var upgrades = list_sounds_in_directory(sounds_path + "upgrades/")
 onready var dialogue = list_sounds_in_directory(sounds_path + "dialogue/")
 onready var door_unlocks = list_sounds_in_directory(sounds_path + "door_unlocks/")
@@ -10,7 +9,7 @@ onready var door_knocks = list_sounds_in_directory(sounds_path + "door_knocks/")
 onready var gunshots = list_sounds_in_directory(sounds_path + "gunshots/")
 onready var footsteps = list_sounds_in_directory(sounds_path + "footsteps/")
 
-onready var request_priority := [ui, upgrades, dialogue, door_unlocks, door_knocks, gunshots, footsteps]
+onready var request_priority := [upgrades, dialogue, door_unlocks, door_knocks, gunshots, footsteps]
 
 func request(request: Array) -> void:
 	if !playing:
