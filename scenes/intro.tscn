@@ -1,0 +1,361 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://ARK.TTF" type="DynamicFontData" id=1]
+[ext_resource path="res://scripts/intro.gd" type="Script" id=2]
+[ext_resource path="res://scenes/audio.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scripts/ui.gd" type="Script" id=4]
+
+[sub_resource type="DynamicFont" id=5]
+outline_color = Color( 0.262745, 0.321569, 0.239216, 1 )
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 1 )
+
+[sub_resource type="Animation" id=12]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ui/columns/easy:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0.780392, 0.941176, 0.847059, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ui/columns/hard:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0.780392, 0.941176, 0.847059, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("ui/columns:rect_rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("background:color")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 0.262745, 0.321569, 0.239216, 1 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("ui/columns/hard:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ true ]
+}
+tracks/6/type = "value"
+tracks/6/path = NodePath("ui/columns/easy:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ true ]
+}
+
+[sub_resource type="Animation" id=14]
+resource_name = "change_scene_left"
+length = 0.3
+tracks/0/type = "method"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.3 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "has_changed_scene"
+} ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ui/columns:rect_rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -9.0, 3.0, 0.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ui/columns/easy:modulate")
+tracks/2/interp = 0
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ Color( 0.780392, 0.941176, 0.847059, 1 ), Color( 0.262745, 0.321569, 0.239216, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("ui/columns/hard:modulate")
+tracks/3/interp = 0
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Color( 0.780392, 0.941176, 0.847059, 1 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("background:color")
+tracks/4/interp = 0
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ Color( 0.262745, 0.321569, 0.239216, 1 ), Color( 0.780392, 0.941176, 0.847059, 1 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("ui/columns/hard:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ true, false ]
+}
+
+[sub_resource type="Animation" id=13]
+resource_name = "change_scene_right"
+length = 0.3
+tracks/0/type = "method"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.3 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "has_changed_scene"
+} ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ui/columns:rect_rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 9.0, -3.0, 0.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ui/columns/easy:modulate")
+tracks/2/interp = 0
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Color( 0.780392, 0.941176, 0.847059, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("ui/columns/hard:modulate")
+tracks/3/interp = 0
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ Color( 0.780392, 0.941176, 0.847059, 1 ), Color( 0.262745, 0.321569, 0.239216, 1 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("background:color")
+tracks/4/interp = 0
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ Color( 0.262745, 0.321569, 0.239216, 1 ), Color( 0.780392, 0.941176, 0.847059, 1 ) ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("ui/columns/easy:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+
+[node name="intro" type="Node2D"]
+script = ExtResource( 2 )
+root_path = "res://scenes/root.tscn"
+
+[node name="audio" parent="." instance=ExtResource( 3 )]
+
+[node name="ui2" type="CanvasLayer" parent="."]
+pause_mode = 2
+scale = Vector2( 0.95, 0.95 )
+transform = Transform2D( 0.95, 0, 0, 0.95, 0, 0 )
+script = ExtResource( 4 )
+
+[node name="doors_unlocked" type="Label" parent="ui2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -12.0
+margin_top = -4.0
+margin_right = -48.0
+margin_bottom = -36.0
+rect_scale = Vector2( 0.5, 0.5 )
+rect_pivot_offset = Vector2( 28, 10 )
+custom_colors/font_color = Color( 0.780392, 0.941176, 0.847059, 1 )
+custom_fonts/font = SubResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="timer" type="Label" parent="ui2"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -19.0
+margin_top = 5.0
+margin_right = -55.0
+margin_bottom = -8.0
+rect_scale = Vector2( 0.5, 0.5 )
+rect_pivot_offset = Vector2( 42, 8 )
+custom_colors/font_color = Color( 0.780392, 0.941176, 0.847059, 1 )
+custom_fonts/font = SubResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ui" type="CanvasLayer" parent="."]
+scale = Vector2( 0.5, 0.5 )
+transform = Transform2D( 0.5, 0, 0, 0.5, 0, 0 )
+
+[node name="columns" type="HBoxContainer" parent="ui"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 84.0
+margin_bottom = 48.0
+rect_pivot_offset = Vector2( 84, 48 )
+custom_constants/separation = 8
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="easy" type="Label" parent="ui/columns"]
+modulate = Color( 0.780392, 0.941176, 0.847059, 1 )
+margin_top = 40.0
+margin_right = 80.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+custom_fonts/font = SubResource( 1 )
+text = "easy"
+align = 1
+valign = 1
+
+[node name="hard" type="Label" parent="ui/columns"]
+modulate = Color( 0.780392, 0.941176, 0.847059, 1 )
+margin_left = 88.0
+margin_top = 40.0
+margin_right = 168.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+custom_fonts/font = SubResource( 1 )
+text = "hard"
+align = 1
+valign = 1
+
+[node name="background" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -42.0
+margin_top = -24.0
+margin_right = 42.0
+margin_bottom = 24.0
+rect_rotation = -0.0789292
+rect_scale = Vector2( 2, 2 )
+color = Color( 0.262745, 0.321569, 0.239216, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="animations" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 12 )
+anims/change_scene_left = SubResource( 14 )
+anims/change_scene_right = SubResource( 13 )
+
+[node name="polygon" type="Polygon2D" parent="."]
+position = Vector2( 42, 24 )
+color = Color( 0.780392, 0.941176, 0.847059, 1 )
+polygon = PoolVector2Array( 1, -1, -1, -1, -1, 0, -2, 1, -1, 1, -1, 3, 0, 2, 1, 3, 1, 1, 2, 1, 1, 0 )

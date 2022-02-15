@@ -67,10 +67,18 @@ func _physics_process(_delta: float) -> void:
 	if dead:
 		return
 
-	if !is_ray_casting_at_wall():
-		chase_target()
+	if position.distance_to(target_position) > chase_distance:
+		if npc_type == "dog":
+			get_next_target()
+		else:
+			direction = Vector2.ZERO
+
 	else:
-		wander()
+		if !is_ray_casting_at_wall():
+			chase_target()
+		else:
+			if target != null:
+				wander()
 
 	if is_instance_valid(target):
 		target_position = target.position
@@ -118,12 +126,6 @@ func wander() -> void:
 func chase_target() -> void:
 	if is_instance_valid(target):
 		direction = ray.cast_to.normalized()
-
-		if position.distance_to(target_position) > chase_distance:
-			if npc_type == "dog":
-				get_next_target()
-			else:
-				direction = Vector2.ZERO
 
 		if is_instance_valid(gun):
 			if gun.ammo > 0:
